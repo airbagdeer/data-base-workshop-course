@@ -1,6 +1,3 @@
-# import pandas as pd
-#
-
 import mysql.connector
 import pandas as pd
 
@@ -25,11 +22,18 @@ conn = mysql.connector.connect(
     database="movies",
 )
 cur = conn.cursor()
-cur.execute("CREATE TABLE IF NOT EXISTS notes(id INT PRIMARY KEY AUTO_INCREMENT, body TEXT)")
-cur.execute("INSERT INTO notes(body) VALUES (%s)", ("hello world",))
+
+create_movies_table_query = """
+CREATE TABLE IF NOT EXISTS movies(
+    movieId INT PRIMARY KEY,
+    title VARCHAR(500),
+    genres VARCHAR(500)
+)
+"""
+
+cur.execute(create_movies_table_query)
+
+sql = "INSERT INTO movies (movieId, title, genres) VALUES (%s, %s, %s)"
+cur.executemany(sql, movies.values.tolist())
+
 conn.commit()
-cur.execute("SELECT id, body FROM notes")
-for row in cur.fetchall():
-    print(row)
-cur.close()
-conn.close()
