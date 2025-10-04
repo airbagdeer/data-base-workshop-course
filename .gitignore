@@ -1,6 +1,7 @@
 .idea
-ml-latest
+data/ml-latest
 *.docx
+*.ipynb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
