@@ -1,18 +1,7 @@
 import pandas as pd
-from db import cur, conn
+from db import cur, conn, check_table_exists, get_only_movie_ids_existing_in_db
 
-def check_table_exists(table_name: str) -> bool:
-    cur.execute("SHOW TABLES LIKE %s", (table_name,))
-    table_exists = cur.fetchone()
-
-    table_nonempty = False
-    if table_exists:
-        cur.execute(f"SELECT COUNT(*) FROM {table_name}")
-        row_count = cur.fetchone()[0]
-        table_nonempty = row_count > 0
-
-    return bool(table_exists and table_nonempty)
-
+movies_amount_limit = 100
 
 def load_ml_movies():
     table_exists = check_table_exists('ml_movies')
@@ -30,8 +19,10 @@ def load_ml_movies():
 
         cur.execute(create_ml_movies_table_query)
 
+        movies_subset = ml_movies[:movies_amount_limit]
+
         insert_ml_movies_query = "INSERT INTO ml_movies (movieId, title, genres) VALUES (%s, %s, %s)"
-        cur.executemany(insert_ml_movies_query, ml_movies.values.tolist())
+        cur.executemany(insert_ml_movies_query, movies_subset.values.tolist())
 
         conn.commit()
 
@@ -40,16 +31,19 @@ def load_ml_ratings():
 
     if not table_exists:
         ml_ratings = pd.read_csv('../data/ml-latest/ratings.csv')
+        ml_ratings = get_only_movie_ids_existing_in_db(ml_ratings, 'movieId')
 
         ml_ratings['rating_time'] = pd.to_datetime(ml_ratings['timestamp'], unit='s')
+        # ml_ratings['rating_time'] = ml_ratings['rating_time'].dt.strftime('%Y-%m-%d %H:%M:%S')
         ml_ratings = ml_ratings.drop(columns=['timestamp'])
+
 
         create_ml_ratings_table_query = """
         CREATE TABLE IF NOT EXISTS ml_ratings(
             userId INT,
             movieId INT,
             rating DECIMAL(2,1),
-            rating_time TIMESTAMP,
+            rating_time DATETIME,
             PRIMARY KEY (userId, movieId),
             FOREIGN KEY (movieId) REFERENCES ml_movies(movieId)
         )
@@ -61,10 +55,11 @@ def load_ml_ratings():
 
         # TODO: Change so it doesnt just load the first 100000, (takes too long)
         batch_size = 100000
-        # for i in range(0, len(ml_ratings), batch_size):
-        #     cur.executemany(insert_ml_ratings_query, ml_ratings.values.tolist()[i:i + batch_size])
+        for i in range(0, len(ml_ratings), batch_size):
+            cur.executemany(insert_ml_ratings_query, ml_ratings.values.tolist()[i:i + batch_size])
 
-        cur.executemany(insert_ml_ratings_query, ml_ratings.values.tolist()[:batch_size])
+        # cur.executemany(insert_ml_ratings_query, ml_ratings.values.tolist()[:batch_size])
+        # cur.executemany(insert_ml_ratings_query, ml_ratings.values.tolist())
 
 
         conn.commit()
@@ -74,6 +69,7 @@ def load_ml_links():
 
     if not table_exists:
         ml_links = pd.read_csv('../data/ml-latest/links.csv')
+        ml_links = get_only_movie_ids_existing_in_db(ml_links)
         ml_links_no_nans = ml_links.astype(object).where(pd.notna(ml_links), None)
 
         create_ml_links_table_query = """
