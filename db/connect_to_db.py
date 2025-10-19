@@ -1,22 +1,35 @@
+from dotenv import load_dotenv
+import os
 import mysql.connector
 
-# 1) Connect without selecting a database
-admin = mysql.connector.connect(
-    host="127.0.0.1",
-    user="root",
-    password="1234567890",
-)
-cur = admin.cursor()
-cur.execute("CREATE DATABASE IF NOT EXISTS movies")  # create schema if missing
-cur.close()
-admin.close()
+load_dotenv()
 
-# 2) Reconnect to the new database and run SQL
-conn = mysql.connector.connect(
-    host="127.0.0.1",
-    user="root",
-    password="1234567890",
-    database="movies",
-    allow_local_infile=True
-)
-cur = conn.cursor()
+def connect_to_db():
+    host = os.getenv("DB_HOST")
+    user = os.getenv("DB_USER")
+    password = os.getenv("DB_PASSWORD")
+    db = os.getenv("DB_NAME")
+    port = int(os.getenv("DB_PORT"))
+
+    # 1) Connect without selecting a database
+    admin = mysql.connector.connect(
+        host=host,
+        user=user,
+        password=password,
+        port=port
+    )
+    cur = admin.cursor()
+    cur.execute(f"CREATE DATABASE IF NOT EXISTS {db}")
+    cur.close()
+    admin.close()
+
+    # 2) Reconnect to the new database and run SQL
+    conn = mysql.connector.connect(
+        host=host,
+        user=user,
+        password=password,
+        database=db,
+        port=port,
+        allow_local_infile=True
+    )
+    return conn
