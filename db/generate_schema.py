@@ -1,7 +1,7 @@
 from  connect_to_db import connect_to_db
 
 
-SCHEMA_FILE = 'db/schema.sql'
+SCHEMA_FILE = './schema.sql'
 
 def generate_schema():
     try:
