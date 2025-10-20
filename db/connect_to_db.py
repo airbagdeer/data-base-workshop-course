@@ -5,9 +5,10 @@ import mysql.connector
 load_dotenv()
 
 def connect_to_db():
+
     host = os.getenv("DB_HOST")
     user = os.getenv("DB_USER")
-    password = os.getenv("DB_PASSWORD")
+    password = os.getenv("DB_PASSWORD") 
     db = os.getenv("DB_NAME")
     port = int(os.getenv("DB_PORT"))
 
@@ -32,4 +33,5 @@ def connect_to_db():
         port=port,
         allow_local_infile=True
     )
+    connection = conn
     return conn

@@ -1,11 +1,7 @@
-from  connect_to_db import connect_to_db
-
-
 SCHEMA_FILE = 'db/schema.sql'
 
-def generate_schema():
+def generate_schema(connection):
     try:
-        connection = connect_to_db()
         run_sql_script(connection, SCHEMA_FILE)
     except Exception as e:
         print(f"Error generating schema: {e}")
