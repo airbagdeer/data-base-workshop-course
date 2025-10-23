@@ -33,5 +33,4 @@ def connect_to_db():
         port=port,
         allow_local_infile=True
     )
-    connection = conn
     return conn

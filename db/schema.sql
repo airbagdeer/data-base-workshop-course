@@ -20,6 +20,17 @@ CREATE TABLE IF NOT EXISTS links(
             tmdbId INT
 );
 
+CREATE TABLE IF NOT EXISTS movies_metadata(
+    movieId INT PRIMARY KEY,
+    budget BIGINT,
+    original_language VARCHAR(2),
+    original_title VARCHAR(500),
+    overview VARCHAR(10000),
+    release_date DATE,
+    revenue BIGINT,
+    runtime INT,
+    title VARCHAR(500))
+
 -- 2. Actors/Actresses table
 -- CREATE TABLE actors (
 --     id INT PRIMARY KEY,       -- TMDB person ID

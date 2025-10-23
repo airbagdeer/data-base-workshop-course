@@ -2,9 +2,11 @@ from pathlib import Path
 
 import pandas as pd
 
+from db import ROOT_DIR
 from utils import get_only_movie_ids_existing_in_db
 
-the_movies_dataset_path = Path("../data/the-movies-dataset/")
+
+the_movies_dataset_path = ROOT_DIR.joinpath('data/the-movies-dataset')
 
 def load_tmd_movies(conn, cur):
     # TODO: ask Itay if I should also read vote_average and vote_count, also ask maybe we should just use this dataset and that's it.
@@ -12,6 +14,7 @@ def load_tmd_movies(conn, cur):
                                   usecols=['id', 'budget', 'original_language', 'original_title', 'overview', 'release_date', 'revenue', 'runtime', 'title']
                                   )
 
+    # TODO: movies_metadata is empty after this function
     movies_metadata = get_only_movie_ids_existing_in_db(cur, movies_metadata, 'id')
 
     # Convert values to integer:

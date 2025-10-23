@@ -7,10 +7,8 @@ def main():
     try:
         conn = connect_to_db()
         cur = conn.cursor()
-        generate_schema(conn)
-        print(f'Generated Schema ...')
-        load_movielens(conn, cur)
-        print(f'Loaded MovieLens Data Set ...')
+        # generate_schema(conn)
+        # load_movielens(conn, cur)
         load_tmd_movies(conn, cur)
         print(f'Loaded The Movies Data Set ...')
     except Exception as e:
