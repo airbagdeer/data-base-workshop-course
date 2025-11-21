@@ -3,8 +3,7 @@ from pathlib import Path
 import pandas as pd
 
 from db import ROOT_DIR
-from utils import get_only_movie_ids_existing_in_db
-
+from utils import get_only_movie_ids_existing_in_db, get_only_tmdb_ids_existing_in_db
 
 the_movies_dataset_path = ROOT_DIR.joinpath('data/the-movies-dataset')
 
@@ -14,8 +13,11 @@ def load_tmd_movies(conn, cur):
                                   usecols=['id', 'budget', 'original_language', 'original_title', 'overview', 'release_date', 'revenue', 'runtime', 'title']
                                   )
 
+    # TODO: Doesnt work
+    movies_metadata['id'] = movies_metadata['id'].astype(int)
+
     # TODO: movies_metadata is empty after this function
-    movies_metadata = get_only_movie_ids_existing_in_db(cur, movies_metadata, 'id')
+    movies_metadata = get_only_tmdb_ids_existing_in_db(cur, movies_metadata, 'id')
 
     # Convert values to integer:
     movies_metadata['movieId'] = pd.to_numeric(movies_metadata['id'], errors='coerce')

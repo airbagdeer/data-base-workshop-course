@@ -1,6 +1,5 @@
 .idea
-data/ml-latest
-*.docx
+data
 *.ipynb
 
 # Byte-compiled / optimized / DLL files
