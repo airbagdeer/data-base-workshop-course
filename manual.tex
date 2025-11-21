@@ -1,0 +1,96 @@
+\documentclass{article}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+
+\title{Educational Movie API User Manual}
+\author{Development Team}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+This document provides a user manual for the Educational Movie API. The API allows users to browse, search, and analyze educational and documentary movies.
+
+\section{Base URL}
+The API is hosted at: \texttt{http://localhost:8000}
+
+\section{Endpoints}
+
+\subsection{General}
+\begin{itemize}
+    \item \textbf{GET /}: Welcome message.
+    \item \textbf{GET /docs}: Interactive API documentation (Swagger UI).
+\end{itemize}
+
+\subsection{Movies}
+\begin{itemize}
+    \item \textbf{GET /movies}: List movies with pagination.
+    \begin{itemize}
+        \item Parameters:
+        \begin{itemize}
+            \item \texttt{skip} (int, default=0): Number of records to skip.
+            \item \texttt{limit} (int, default=10): Number of records to return.
+        \end{itemize}
+    \end{itemize}
+    
+    \item \textbf{GET /movies/\{movie\_id\}}: Get detailed information about a specific movie.
+    \begin{itemize}
+        \item Parameters:
+        \begin{itemize}
+            \item \texttt{movie\_id} (int): The ID of the movie.
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Search}
+\begin{itemize}
+    \item \textbf{GET /search}: Search movies by title.
+    \begin{itemize}
+        \item Parameters:
+        \begin{itemize}
+            \item \texttt{q} (str): Search query (min length 3).
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Analytics}
+The following endpoints provide complex analytical insights:
+
+\begin{itemize}
+    \item \textbf{GET /analytics/popular-genres}: Top 5 most popular genres in documentaries.
+    \item \textbf{GET /analytics/prolific-actors}: Actors who have appeared in multiple documentaries.
+    \item \textbf{GET /analytics/avg-runtime-by-year}: Average runtime of documentaries by release year.
+    \item \textbf{GET /analytics/flops}: Movies with high budget but low revenue.
+    \item \textbf{GET /analytics/director-actors}: Directors who also acted in the same movie.
+    \item \textbf{GET /analytics/top-production-countries}: Top production countries by number of movies.
+    \item \textbf{GET /analytics/keyword-rich-movies}: Movies with the most keywords.
+    \item \textbf{GET /analytics/history-war-movies}: Movies with more than 3 genres.
+    \item \textbf{GET /analytics/best-year}: Year with the highest average vote (min 3 movies).
+    \item \textbf{GET /analytics/multiskilled-crew}: Crew members who worked in more than one department.
+\end{itemize}
+
+\section{Error Handling}
+The API returns standard HTTP status codes:
+\begin{itemize}
+    \item 200: Success
+    \item 404: Not Found
+    \item 422: Validation Error
+    \item 500: Internal Server Error
+\end{itemize}
+
+\section{Poster Endpoint}
+
+\subsection{Get Movie Poster}
+\textbf{Endpoint:} \texttt{GET /movies/\{movie\_id\}/poster} \\
+\textbf{Description:} Retrieves the poster image for a specific movie. \\
+\textbf{Parameters:}
+\begin{itemize}
+    \item \texttt{movie\_id} (path): The ID of the movie.
+\end{itemize}
+\textbf{Response:} Returns the image file (JPEG) directly. Returns 404 if not found.
+
+\end{document}
+
