@@ -1,8 +1,8 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map, of, switchMap } from 'rxjs';
 import { MovieService, MovieDetail } from '../../services/movie';
 
@@ -16,14 +16,9 @@ import { MovieService, MovieDetail } from '../../services/movie';
 export class MovieDetailComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly movieService = inject(MovieService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  readonly movie = toSignal(
-    this.route.paramMap.pipe(
-      map(params => Number(params.get('id'))),
-      switchMap(id => id ? this.movieService.getMovie(id) : of(null))
-    ),
-    { initialValue: null as MovieDetail | null }
-  );
+  readonly movie = signal<MovieDetail | null>(null);
 
   readonly posterUrl = computed(() => {
     const m = this.movie();
@@ -35,18 +30,41 @@ export class MovieDetailComponent {
   readonly userRating = signal(0);
   readonly message = signal('');
 
+  constructor() {
+    this.loadMovieOnRouteChange();
+  }
+
+  private loadMovieOnRouteChange(): void {
+    this.route.paramMap
+      .pipe(
+        map(params => Number(params.get('id'))),
+        switchMap(id => id ? this.movieService.getMovie(id) : of(null)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(movie => this.movie.set(movie));
+  }
+
+  private refreshMovie(id: number): void {
+    this.movieService.getMovie(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(movie => this.movie.set(movie));
+  }
+
   submitRating(): void {
     const movie = this.movie();
-    const rating = this.userRating();
+    const rating = Number(this.userRating());
     if (movie && rating > 0 && rating <= 10) {
-      this.movieService.rateMovie(movie.id, rating).subscribe({
-        next: () => {
-          this.message.set('Rating submitted successfully!');
-        },
-        error: () => {
-          this.message.set('Error submitting rating.');
-        }
-      });
+      this.movieService.rateMovie(movie.id, rating)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            this.message.set('Rating submitted successfully!');
+            this.refreshMovie(movie.id);
+          },
+          error: () => {
+            this.message.set('Error submitting rating.');
+          }
+        });
     }
   }
 }

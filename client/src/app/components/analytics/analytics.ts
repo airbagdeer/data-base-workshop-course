@@ -25,4 +25,39 @@ export class AnalyticsComponent {
     this.movieService.getAverageRuntime(),
     { initialValue: [] as any[] }
   );
+
+  readonly flops = toSignal(
+    this.movieService.getFlops(),
+    { initialValue: [] as any[] }
+  );
+
+  readonly directorActors = toSignal(
+    this.movieService.getDirectorActors(),
+    { initialValue: [] as any[] }
+  );
+
+  readonly topCountries = toSignal(
+    this.movieService.getTopProductionCountries(),
+    { initialValue: [] as any[] }
+  );
+
+  readonly keywordRichMovies = toSignal(
+    this.movieService.getKeywordRichMovies(),
+    { initialValue: [] as any[] }
+  );
+
+  readonly genreHeavyMovies = toSignal(
+    this.movieService.getGenreHeavyMovies(),
+    { initialValue: [] as any[] }
+  );
+
+  readonly bestYear = toSignal(
+    this.movieService.getBestYear(),
+    { initialValue: [] as any[] }
+  );
+
+  readonly multiskilledCrew = toSignal(
+    this.movieService.getMultiskilledCrew(),
+    { initialValue: [] as any[] }
+  );
 }

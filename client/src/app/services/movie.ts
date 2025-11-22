@@ -44,8 +44,8 @@ export class MovieService {
     return `${this.apiUrl}/movies/${id}/poster`;
   }
 
-  rateMovie(id: number, rating: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/movies/${id}/rate`, { rating });
+  rateMovie(id: number, rating: number): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/movies/${id}/rate`, { rating });
   }
 
   // Analytics
@@ -59,5 +59,33 @@ export class MovieService {
 
   getAverageRuntime(): Observable<any> {
     return this.http.get(`${this.apiUrl}/analytics/average-runtime-by-genre`);
+  }
+
+  getFlops(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/analytics/flops`);
+  }
+
+  getDirectorActors(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/analytics/director-actors`);
+  }
+
+  getTopProductionCountries(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/analytics/top-production-countries`);
+  }
+
+  getKeywordRichMovies(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/analytics/keyword-rich-movies`);
+  }
+
+  getGenreHeavyMovies(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/analytics/history-war-movies`);
+  }
+
+  getBestYear(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/analytics/best-year`);
+  }
+
+  getMultiskilledCrew(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/analytics/multiskilled-crew`);
   }
 }
