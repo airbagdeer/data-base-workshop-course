@@ -1,36 +1,50 @@
-<div class="container" *ngIf="movie">
-    <div class="detail-header">
-        <img [src]="getPoster()" [alt]="movie.title" class="poster">
-        <div class="info">
-            <h1>{{ movie.title }}</h1>
-            <p class="tagline">{{ movie.tagline }}</p>
-            <p>{{ movie.overview }}</p>
+@if (movie(); as movie) {
+  <div class="container">
+      <div class="detail-header">
+          <img [src]="posterUrl()" [alt]="movie.title" class="poster">
+          <div class="info">
+              <h1>{{ movie.title }}</h1>
+              <p class="tagline">{{ movie.tagline }}</p>
+              <p>{{ movie.overview }}</p>
 
-            <div class="meta">
-                <p><strong>Release Date:</strong> {{ movie.release_date | date }}</p>
-                <p><strong>Runtime:</strong> {{ movie.runtime }} mins</p>
-                <p><strong>Rating:</strong> {{ movie.vote_average }} ({{ movie.vote_count }} votes)</p>
-            </div>
+              <div class="meta">
+                  <p><strong>Release Date:</strong> {{ movie.release_date | date }}</p>
+                  <p><strong>Runtime:</strong> {{ movie.runtime }} mins</p>
+                  <p><strong>Rating:</strong> {{ movie.vote_average }} ({{ movie.vote_count }} votes)</p>
+              </div>
 
-            <div class="genres">
-                <span *ngFor="let g of movie.genres" class="badge">{{ g.name }}</span>
-            </div>
-        </div>
-    </div>
+              <div class="genres">
+                  @for (g of movie.genres; track g.id) {
+                    <span class="badge">{{ g.name }}</span>
+                  }
+              </div>
+          </div>
+      </div>
 
-    <div class="rating-section">
-        <h3>Rate this Movie</h3>
-        <input type="number" [(ngModel)]="userRating" min="0" max="10" step="0.1">
-        <button (click)="submitRating()">Submit Rating</button>
-        <p *ngIf="message">{{ message }}</p>
-    </div>
+      <div class="rating-section">
+          <h3>Rate this Movie</h3>
+          <input
+            type="number"
+            [ngModel]="userRating()"
+            (ngModelChange)="userRating.set($event)"
+            min="0"
+            max="10"
+            step="0.1">
+          <button (click)="submitRating()">Submit Rating</button>
+          @if (message()) {
+            <p>{{ message() }}</p>
+          }
+      </div>
 
-    <div class="credits">
-        <h3>Cast</h3>
-        <div class="cast-list">
-            <div *ngFor="let c of movie.cast.slice(0, 10)" class="cast-member">
-                <strong>{{ c.name }}</strong> as {{ c.character }}
-            </div>
-        </div>
-    </div>
-</div>
+      <div class="credits">
+          <h3>Cast</h3>
+          <div class="cast-list">
+              @for (c of topCast(); track c.id) {
+                <div class="cast-member">
+                    <strong>{{ c.name }}</strong> as {{ c.character }}
+                </div>
+              }
+          </div>
+      </div>
+  </div>
+}

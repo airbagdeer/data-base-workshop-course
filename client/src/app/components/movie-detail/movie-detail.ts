@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map, of, switchMap } from 'rxjs';
 import { MovieService, MovieDetail } from '../../services/movie';
 
 @Component({
@@ -11,38 +13,38 @@ import { MovieService, MovieDetail } from '../../services/movie';
   templateUrl: './movie-detail.html',
   styleUrl: './movie-detail.css'
 })
-export class MovieDetailComponent implements OnInit {
-  movie: MovieDetail | null = null;
-  userRating: number = 0;
-  message: string = '';
+export class MovieDetailComponent {
+  private readonly route = inject(ActivatedRoute);
+  private readonly movieService = inject(MovieService);
 
-  constructor(
-    private route: ActivatedRoute,
-    private movieService: MovieService
-  ) { }
+  readonly movie = toSignal(
+    this.route.paramMap.pipe(
+      map(params => Number(params.get('id'))),
+      switchMap(id => id ? this.movieService.getMovie(id) : of(null))
+    ),
+    { initialValue: null as MovieDetail | null }
+  );
 
-  ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    if (id) {
-      this.movieService.getMovie(id).subscribe(movie => {
-        this.movie = movie;
-      });
-    }
-  }
+  readonly posterUrl = computed(() => {
+    const m = this.movie();
+    return m ? this.movieService.getPosterUrl(m.id) : '';
+  });
 
-  getPoster(): string {
-    return this.movie ? this.movieService.getPosterUrl(this.movie.id) : '';
-  }
+  readonly topCast = computed(() => this.movie()?.cast.slice(0, 10) ?? []);
+
+  readonly userRating = signal(0);
+  readonly message = signal('');
 
   submitRating(): void {
-    if (this.movie && this.userRating > 0 && this.userRating <= 10) {
-      this.movieService.rateMovie(this.movie.id, this.userRating).subscribe({
+    const movie = this.movie();
+    const rating = this.userRating();
+    if (movie && rating > 0 && rating <= 10) {
+      this.movieService.rateMovie(movie.id, rating).subscribe({
         next: () => {
-          this.message = 'Rating submitted successfully!';
-          // Optionally refresh movie data
+          this.message.set('Rating submitted successfully!');
         },
         error: () => {
-          this.message = 'Error submitting rating.';
+          this.message.set('Error submitting rating.');
         }
       });
     }

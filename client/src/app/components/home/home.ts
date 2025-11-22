@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MovieService, Movie } from '../../services/movie';
 
 @Component({
@@ -10,16 +11,13 @@ import { MovieService, Movie } from '../../services/movie';
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
-export class HomeComponent implements OnInit {
-  movies: Movie[] = [];
+export class HomeComponent {
+  private readonly movieService = inject(MovieService);
 
-  constructor(private movieService: MovieService) { }
-
-  ngOnInit(): void {
-    this.movieService.getMovies(0, 100).subscribe(movies => {
-      this.movies = movies;
-    });
-  }
+  readonly movies = toSignal(
+    this.movieService.getMovies(0, 100),
+    { initialValue: [] as Movie[] }
+  );
 
   getPoster(id: number): string {
     return this.movieService.getPosterUrl(id);

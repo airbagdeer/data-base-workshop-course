@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MovieService } from '../../services/movie';
 
 @Component({
@@ -9,16 +10,19 @@ import { MovieService } from '../../services/movie';
   templateUrl: './analytics.html',
   styleUrl: './analytics.css'
 })
-export class AnalyticsComponent implements OnInit {
-  popularGenres: any[] = [];
-  topActors: any[] = [];
-  avgRuntime: any[] = [];
+export class AnalyticsComponent {
+  private readonly movieService = inject(MovieService);
 
-  constructor(private movieService: MovieService) { }
-
-  ngOnInit(): void {
-    this.movieService.getPopularGenres().subscribe(data => this.popularGenres = data);
-    this.movieService.getTopActors().subscribe(data => this.topActors = data);
-    this.movieService.getAverageRuntime().subscribe(data => this.avgRuntime = data);
-  }
+  readonly popularGenres = toSignal(
+    this.movieService.getPopularGenres(),
+    { initialValue: [] as any[] }
+  );
+  readonly topActors = toSignal(
+    this.movieService.getTopActors(),
+    { initialValue: [] as any[] }
+  );
+  readonly avgRuntime = toSignal(
+    this.movieService.getAverageRuntime(),
+    { initialValue: [] as any[] }
+  );
 }
