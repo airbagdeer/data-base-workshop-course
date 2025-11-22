@@ -145,3 +145,12 @@ CREATE TABLE IF NOT EXISTS movie_posters (
     image LONGBLOB,
     FOREIGN KEY (movie_id) REFERENCES movies(id)
 );
+
+CREATE TABLE IF NOT EXISTS ratings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    movie_id INT,
+    rating FLOAT,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (movie_id) REFERENCES movies(id)
+);
+

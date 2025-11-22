@@ -20,6 +20,10 @@ class CrewMember(Person):
     job: Optional[str] = None
     department: Optional[str] = None
 
+class RatingCreate(BaseModel):
+    rating: float
+    order_index: Optional[int] = None
+
 class MovieBase(BaseModel):
     id: int
     title: str

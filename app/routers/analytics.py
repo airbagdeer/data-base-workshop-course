@@ -10,7 +10,7 @@ def popular_genres():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     query = """
-        SELECT g.name, COUNT(mg.movie_id) as movie_count
+        SELECT g.name as genre, COUNT(mg.movie_id) as movie_count
         FROM genres g
         JOIN movie_genres mg ON g.id = mg.genre_id
         GROUP BY g.name
@@ -23,13 +23,13 @@ def popular_genres():
     conn.close()
     return result
 
-@router.get("/analytics/prolific-actors")
+@router.get("/analytics/top-actors")
 def prolific_actors():
     """2. Actors who have appeared in multiple documentaries."""
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     query = """
-        SELECT p.name, COUNT(c.movie_id) as movie_count
+        SELECT p.name as actor_name, COUNT(c.movie_id) as movie_count
         FROM people p
         JOIN cast_members c ON p.id = c.person_id
         GROUP BY p.id, p.name
@@ -43,23 +43,27 @@ def prolific_actors():
     conn.close()
     return result
 
-@router.get("/analytics/avg-runtime-by-year")
-def avg_runtime_by_year():
-    """3. Average runtime of documentaries by release year."""
+@router.get("/analytics/average-runtime-by-genre")
+def avg_runtime_by_genre():
+    """3. Average runtime of documentaries by genre."""
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     query = """
-        SELECT YEAR(release_date) as year, AVG(runtime) as avg_runtime
-        FROM movies
-        WHERE release_date IS NOT NULL
-        GROUP BY year
-        ORDER BY year DESC
+        SELECT g.name as genre, AVG(m.runtime) as avg_runtime
+        FROM genres g
+        JOIN movie_genres mg ON g.id = mg.genre_id
+        JOIN movies m ON mg.movie_id = m.id
+        WHERE m.runtime IS NOT NULL
+        GROUP BY g.name
+        ORDER BY avg_runtime DESC
+        LIMIT 10
     """
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
     conn.close()
     return result
+
 
 @router.get("/analytics/flops")
 def flops():

@@ -1,0 +1,57 @@
+<div class="container">
+    <h1>Analytics Dashboard</h1>
+
+    <div class="section">
+        <h2>Popular Genres</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Genre</th>
+                    <th>Movie Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of popularGenres">
+                    <td>{{ item.genre }}</td>
+                    <td>{{ item.movie_count }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Top Actors</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Actor</th>
+                    <th>Movie Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of topActors">
+                    <td>{{ item.actor_name }}</td>
+                    <td>{{ item.movie_count }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Average Runtime by Genre</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Genre</th>
+                    <th>Avg Runtime (min)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of avgRuntime">
+                    <td>{{ item.genre }}</td>
+                    <td>{{ item.avg_runtime | number:'1.0-0' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

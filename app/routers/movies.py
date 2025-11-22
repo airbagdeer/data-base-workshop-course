@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Query, Response
 from typing import List, Optional
 from app.database import get_db_connection
-from app.models import MovieBase, MovieDetail, Genre, CastMember, CrewMember
+from app.models import MovieBase, MovieDetail, Genre, CastMember, CrewMember, RatingCreate
 
 router = APIRouter()
 
@@ -41,7 +41,7 @@ def get_movie_detail(movie_id: int):
     
     # Get cast
     cursor.execute("""
-        SELECT p.id, p.name, p.gender, p.profile_path, c.character_name, c.order_index
+        SELECT p.id, p.name, p.gender, p.profile_path, c.character_name as `character`, c.order_index as `order`
         FROM people p
         JOIN cast_members c ON p.id = c.person_id
         WHERE c.movie_id = %s
@@ -83,3 +83,26 @@ def get_movie_poster(movie_id: int):
         raise HTTPException(status_code=404, detail="Poster not found")
         
     return Response(content=result[0], media_type="image/jpeg")
+
+@router.post("/movies/{movie_id}/rate")
+def rate_movie(movie_id: int, rating_data: RatingCreate):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Check if movie exists
+    cursor.execute("SELECT id FROM movies WHERE id = %s", (movie_id,))
+    if not cursor.fetchone():
+        cursor.close()
+        conn.close()
+        raise HTTPException(status_code=404, detail="Movie not found")
+        
+    # Insert rating
+    query = "INSERT INTO ratings (movie_id, rating) VALUES (%s, %s)"
+    cursor.execute(query, (movie_id, rating_data.rating))
+    conn.commit()
+    
+    cursor.close()
+    conn.close()
+    
+    return {"message": "Rating added successfully"}
+
