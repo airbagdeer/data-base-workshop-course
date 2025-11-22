@@ -1,0 +1,337 @@
+\documentclass{article}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{geometry}
+
+\geometry{a4paper, margin=1in}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{Educational Movie Platform \\ \large User Manual \& Technical Documentation}
+\author{324827328, 213713522}
+\date{}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+This document serves as the comprehensive user manual and technical documentation for the Educational Movie Platform. This full-stack application allows users to explore, rate, and analyze a curated collection of educational and documentary movies. The system is designed to handle complex data relationships and provide deep analytical insights.
+
+\section{Datasets}
+The platform integrates data from two primary sources, carefully curated to focus on educational content.
+
+\subsection{The Movies Dataset}
+We utilized the \textbf{The Movies Dataset} from Kaggle, which provides a rich set of metadata for over 45,000 movies. We specifically used:
+\begin{itemize}
+    \item \texttt{movies\_metadata.csv}: Contains core movie information (title, release date, runtime, overview, popularity, etc.).
+    \item \texttt{credits.csv}: Contains cast and crew information in JSON format.
+    \item \texttt{keywords.csv}: Contains plot keywords in JSON format.
+\end{itemize}
+
+\subsection{PosterLens}
+We used the \textbf{PosterLens} dataset to provide visual assets (movie posters). The posters are linked to movies via their IMDB IDs.
+
+\subsection{Data Curation Process}
+To create a focused "Educational" dataset, we implemented a rigorous filtering process:
+\begin{enumerate}
+    \item \textbf{Genre Filtering}: We selected movies that include the genres \textbf{'Documentary'} or \textbf{'History'}.
+    \item \textbf{Exclusion Criteria}: We explicitly excluded any movies with the \textbf{'Horror'} genre to ensure the content is suitable for educational purposes.
+    \item \textbf{Poster Mapping}: We cross-referenced these movies with the PosterLens dataset. Since PosterLens uses IMDB IDs (e.g., '0114709') and our metadata uses TMDB IDs, we implemented a mapping logic to strip the 'tt' prefix from IMDB IDs to match the poster filenames.
+    \item \textbf{Top Selection}: We sorted the filtered list by popularity and selected the \textbf{top 100} movies to populate the database, ensuring high-quality and relevant content.
+\end{enumerate}
+
+\section{Database Design}
+The backend uses a \textbf{MySQL} relational database. The design prioritizes data integrity, efficiency, and scalability through normalization.
+
+\subsection{Design Choices}
+\begin{itemize}
+    \item \textbf{Normalization (3NF)}: The schema is normalized to the Third Normal Form. For example, actor names are stored once in the \texttt{people} table and referenced by ID in the \texttt{cast\_members} table. This prevents data redundancy and anomalies (e.g., updating an actor's name in one place updates it everywhere).
+    \item \textbf{Junction Tables}: We use junction tables for all many-to-many relationships (e.g., \texttt{movie\_genres}, \texttt{movie\_keywords}). This allows a movie to have multiple genres and a genre to belong to multiple movies without violating normalization rules.
+    \item \textbf{Composite Primary Keys}: In junction tables like \texttt{movie\_genres}, the primary key is a composite of \texttt{(movie\_id, genre\_id)}, ensuring that a specific genre cannot be assigned to the same movie twice.
+    \item \textbf{Foreign Key Constraints}: We enforce referential integrity. For instance, a rating cannot be added for a non-existent movie, and if a movie is deleted, its associated data (genres, cast, etc.) would be handled according to the constraint logic (though currently set to restrict).
+    \item \textbf{Binary Storage}: We chose to store movie poster images directly in the database as \texttt{LONGBLOB} data in the \texttt{movie\_posters} table. While storing file paths is common, this approach makes the database self-contained and simplifies backup/migration for this specific project scope.
+\end{itemize}
+
+\subsection{Schema Definitions}
+Below are the SQL definitions for the database tables.
+
+\subsubsection{Core Movie Data}
+The \texttt{movies} table is the central entity.
+\begin{lstlisting}[language=SQL]
+CREATE TABLE IF NOT EXISTS movies (
+    id INT PRIMARY KEY,
+    title VARCHAR(500) NOT NULL,
+    original_title VARCHAR(500),
+    overview TEXT,
+    release_date DATE,
+    runtime FLOAT,
+    budget BIGINT,
+    revenue BIGINT,
+    popularity FLOAT,
+    vote_average FLOAT,
+    vote_count INT,
+    status VARCHAR(50),
+    tagline VARCHAR(500)
+);
+\end{lstlisting}
+
+\subsubsection{People, Cast, and Crew (Complex Relationship)}
+This is one of the more complex parts of the schema. We separate the \textit{person} (entity) from their \textit{role} (relationship).
+\begin{itemize}
+    \item \texttt{people}: Stores unique individuals.
+    \item \texttt{cast\_members}: Links people to movies with \texttt{character\_name} and \texttt{order\_index}.
+    \item \texttt{crew\_members}: Links people to movies with \texttt{job} and \texttt{department}.
+\end{itemize}
+
+\begin{lstlisting}[language=SQL]
+CREATE TABLE IF NOT EXISTS people (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    gender INT, -- 0=Unknown, 1=Female, 2=Male
+    profile_path VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS cast_members (
+    credit_id VARCHAR(255) PRIMARY KEY,
+    movie_id INT,
+    person_id INT,
+    character_name VARCHAR(500),
+    order_index INT,
+    FOREIGN KEY (movie_id) REFERENCES movies(id),
+    FOREIGN KEY (person_id) REFERENCES people(id)
+);
+
+CREATE TABLE IF NOT EXISTS crew_members (
+    credit_id VARCHAR(255) PRIMARY KEY,
+    movie_id INT,
+    person_id INT,
+    job VARCHAR(255),
+    department VARCHAR(255),
+    FOREIGN KEY (movie_id) REFERENCES movies(id),
+    FOREIGN KEY (person_id) REFERENCES people(id)
+);
+\end{lstlisting}
+
+\subsubsection{Categorization (Many-to-Many)}
+Tables for Genres, Keywords, Companies, Countries, and Languages all follow a similar pattern: a lookup table and a junction table.
+
+\begin{lstlisting}[language=SQL]
+-- Example: Genres
+CREATE TABLE IF NOT EXISTS genres (
+    id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS movie_genres (
+    movie_id INT,
+    genre_id INT,
+    PRIMARY KEY (movie_id, genre_id),
+    FOREIGN KEY (movie_id) REFERENCES movies(id),
+    FOREIGN KEY (genre_id) REFERENCES genres(id)
+);
+\end{lstlisting}
+(Similar structures exist for \texttt{keywords}, \texttt{production\_companies}, \texttt{production\_countries}, and \texttt{spoken\_languages}.)
+
+\subsubsection{Media and User Interaction}
+\begin{lstlisting}[language=SQL]
+CREATE TABLE IF NOT EXISTS movie_posters (
+    movie_id INT PRIMARY KEY,
+    image LONGBLOB,
+    FOREIGN KEY (movie_id) REFERENCES movies(id)
+);
+
+CREATE TABLE IF NOT EXISTS ratings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    movie_id INT,
+    rating FLOAT,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (movie_id) REFERENCES movies(id)
+);
+\end{lstlisting}
+
+\section{Backend API Routes}
+The backend is built with \textbf{FastAPI}, providing a high-performance, self-documenting REST API.
+
+\subsection{Standard Endpoints}
+\begin{itemize}
+    \item \texttt{GET /movies}: List movies with pagination support (\texttt{skip}, \texttt{limit}).
+    \item \texttt{GET /movies/\{id\}}: Retrieve detailed information for a specific movie, including joined data from genres, cast, and crew.
+    \item \texttt{GET /movies/\{id\}/poster}: Retrieve the binary image data for a movie poster.
+    \item \texttt{POST /movies/\{id\}/rate}: Submit a user rating for a movie.
+    \item \texttt{GET /search?q=query}: Search for movies by title using SQL \texttt{LIKE} queries.
+\end{itemize}
+
+\subsection{Complex Analytics Endpoints}
+These endpoints showcase the power of SQL for data analysis, involving aggregations, joins across multiple tables, and subqueries.
+
+\begin{enumerate}
+    \item \textbf{Popular Genres} (\texttt{/analytics/popular-genres}):
+    \textit{Query}: Joins \texttt{genres} and \texttt{movie\_genres}, groups by genre name, and counts movies.
+    \begin{lstlisting}[language=SQL]
+    SELECT g.name as genre, COUNT(mg.movie_id) as movie_count
+    FROM genres g
+    JOIN movie_genres mg ON g.id = mg.genre_id
+    GROUP BY g.name
+    ORDER BY movie_count DESC
+    LIMIT 5
+    \end{lstlisting}
+    
+    \item \textbf{Top Actors} (\texttt{/analytics/top-actors}):
+    \textit{Query}: Joins \texttt{people} and \texttt{cast\_members}, groups by actor, filters for actors with $>1$ movie.
+    \begin{lstlisting}[language=SQL]
+    SELECT p.name as actor_name, COUNT(c.movie_id) as movie_count
+    FROM people p
+    JOIN cast_members c ON p.id = c.person_id
+    GROUP BY p.id, p.name
+    HAVING movie_count > 1
+    ORDER BY movie_count DESC
+    LIMIT 10
+    \end{lstlisting}
+    
+    \item \textbf{Average Runtime by Genre} (\texttt{/analytics/average-runtime-by-genre}):
+    \textit{Query}: Three-way join (\texttt{genres} $\to$ \texttt{movie\_genres} $\to$ \texttt{movies}), calculates average runtime per genre.
+    \begin{lstlisting}[language=SQL]
+    SELECT g.name as genre, AVG(m.runtime) as avg_runtime
+    FROM genres g
+    JOIN movie_genres mg ON g.id = mg.genre_id
+    JOIN movies m ON mg.movie_id = m.id
+    WHERE m.runtime IS NOT NULL
+    GROUP BY g.name
+    ORDER BY avg_runtime DESC
+    LIMIT 10
+    \end{lstlisting}
+    
+    \item \textbf{Movie Flops} (\texttt{/analytics/flops}):
+    \textit{Query}: Selects movies where \texttt{budget > 1M} AND \texttt{revenue < budget}, sorted by loss.
+    \begin{lstlisting}[language=SQL]
+    SELECT title, budget, revenue, (budget - revenue) as loss
+    FROM movies
+    WHERE budget > 1000000 AND revenue < budget AND revenue > 0
+    ORDER BY loss DESC
+    LIMIT 10
+    \end{lstlisting}
+    
+    \item \textbf{Director-Actors} (\texttt{/analytics/director-actors}):
+    \textit{Query}: Complex self-join on \texttt{people} via \texttt{cast\_members} and \texttt{crew\_members} to find individuals who both directed and acted in the same film.
+    \begin{lstlisting}[language=SQL]
+    SELECT p.name, m.title
+    FROM people p
+    JOIN cast_members c ON p.id = c.person_id
+    JOIN crew_members cr ON p.id = cr.person_id AND c.movie_id = cr.movie_id
+    JOIN movies m ON c.movie_id = m.id
+    WHERE cr.job = 'Director'
+    \end{lstlisting}
+    
+    \item \textbf{Top Production Countries} (\texttt{/analytics/top-production-countries}):
+    \textit{Query}: Aggregates movie counts by country.
+    \begin{lstlisting}[language=SQL]
+    SELECT pc.name, COUNT(mc.movie_id) as movie_count
+    FROM production_countries pc
+    JOIN movie_countries mc ON pc.iso_3166_1 = mc.country_code
+    GROUP BY pc.name
+    ORDER BY movie_count DESC
+    LIMIT 10
+    \end{lstlisting}
+    
+    \item \textbf{Keyword Rich Movies} (\texttt{/analytics/keyword-rich-movies}):
+    \textit{Query}: Counts the number of keywords associated with each movie.
+    \begin{lstlisting}[language=SQL]
+    SELECT m.title, COUNT(mk.keyword_id) as keyword_count
+    FROM movies m
+    JOIN movie_keywords mk ON m.id = mk.movie_id
+    GROUP BY m.id, m.title
+    ORDER BY keyword_count DESC
+    LIMIT 10
+    \end{lstlisting}
+    
+    \item \textbf{Genre-Heavy Movies} (\texttt{/analytics/history-war-movies}):
+    \textit{Query}: Filters for movies associated with more than 3 genres.
+    \begin{lstlisting}[language=SQL]
+    SELECT m.title, COUNT(mg.genre_id) as genre_count
+    FROM movies m
+    JOIN movie_genres mg ON m.id = mg.movie_id
+    GROUP BY m.id, m.title
+    HAVING genre_count > 3
+    ORDER BY genre_count DESC
+    \end{lstlisting}
+    
+    \item \textbf{Best Year} (\texttt{/analytics/best-year}):
+    \textit{Query}: Groups movies by release year, calculates average vote, filters for years with $\ge 3$ movies, returns the top year.
+    \begin{lstlisting}[language=SQL]
+    SELECT YEAR(release_date) as year, AVG(vote_average) as avg_vote, COUNT(*) as movie_count
+    FROM movies
+    WHERE release_date IS NOT NULL
+    GROUP BY year
+    HAVING movie_count >= 3
+    ORDER BY avg_vote DESC
+    LIMIT 1
+    \end{lstlisting}
+    
+    \item \textbf{Multiskilled Crew} (\texttt{/analytics/multiskilled-crew}):
+    \textit{Query}: Finds crew members who have credits in more than one unique department.
+    \begin{lstlisting}[language=SQL]
+    SELECT p.name, COUNT(DISTINCT cr.department) as dept_count
+    FROM people p
+    JOIN crew_members cr ON p.id = cr.person_id
+    GROUP BY p.id, p.name
+    HAVING dept_count > 1
+    ORDER BY dept_count DESC
+    LIMIT 10
+    \end{lstlisting}
+\end{enumerate}
+
+\section{Client Application}
+The frontend is a modern Single Page Application (SPA) built with \textbf{Angular 17+}.
+
+\subsection{Architecture & Technologies}
+\begin{itemize}
+    \item \textbf{Standalone Components}: We utilize Angular's latest standalone component architecture, reducing boilerplate and removing the need for \texttt{NgModules}.
+    \item \textbf{Signals}: The application leverages Angular Signals for fine-grained reactivity. This ensures that the UI updates efficiently only when specific data changes.
+    \item \textbf{RxJS}: Used for handling asynchronous API calls and event streams.
+    \item \textbf{TypeScript}: Ensures type safety across the application, matching the Pydantic models used in the backend.
+\end{itemize}
+
+\subsection{Key Features}
+\begin{itemize}
+    \item \textbf{Home Page}: Displays a responsive grid of movie posters. Clicking a poster navigates to the details view.
+    \item \textbf{Movie Detail Page}: 
+    \begin{itemize}
+        \item Displays full metadata (plot, runtime, budget, etc.).
+        \item Lists cast members with their character names.
+        \item Shows genre badges.
+        \item \textbf{Rating System}: Allows users to submit a rating (0-10), which is persisted to the database.
+    \end{itemize}
+    \item \textbf{Analytics Dashboard}: A dedicated view that visualizes the data from all 10 complex analytics endpoints in easy-to-read tables.
+\end{itemize}
+
+\end{document}
