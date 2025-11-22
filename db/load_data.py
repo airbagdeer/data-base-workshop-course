@@ -17,8 +17,7 @@ def parse_json_safe(x):
     except (ValueError, SyntaxError):
         return []
 
-def get_poster_filename(movie_id):
-    return f"{int(movie_id):07d}.jpg"
+
 
 def load_data():
     print("Connecting to database...")
@@ -44,21 +43,24 @@ def load_data():
     # Load Educational Movies List
     print(f"Loading educational movies list from {EDUCATIONAL_LIST_PATH}...")
     with open(EDUCATIONAL_LIST_PATH, "r") as f:
-        educational_ids = json.load(f)
+        educational_movies = json.load(f)
         
     # Take top 100
-    target_ids = educational_ids[:100]
+    top_100_movies = educational_movies[:100]
+    target_ids = [int(m['id']) for m in top_100_movies]
+    poster_map = {int(m['id']): m['poster_file'] for m in top_100_movies}
+    
     print(f"Targeting top {len(target_ids)} educational movies.")
     
     # Filter movies_df
     movies_df['id'] = pd.to_numeric(movies_df['id'], errors='coerce')
-    movies_df = movies_df.dropna(subset=['id'])
+    movies_df = movies_df.dropna(subset=['id', 'title'])
     movies_df['id'] = movies_df['id'].astype(int)
     
     movies_df = movies_df[movies_df['id'].isin(target_ids)]
     
     # Sort to match the order in target_ids (popularity desc)
-    movies_df = movies_df.set_index('id').reindex(target_ids).reset_index()
+    movies_df = movies_df.set_index('id').reindex(target_ids).dropna(subset=['title']).reset_index()
     
     print(f"Found {len(movies_df)} movies in metadata.")
 
@@ -172,12 +174,13 @@ def load_data():
                 cursor.execute(insert_movie_keyword, (movie_id, k['id']))
         
         # Poster
-        poster_filename = get_poster_filename(movie_id)
-        poster_path = POSTERS_DIR / poster_filename
-        if poster_path.exists():
-            with open(poster_path, "rb") as f:
-                image_data = f.read()
-                cursor.execute(insert_poster, (movie_id, image_data))
+        poster_filename = poster_map.get(movie_id)
+        if poster_filename:
+            poster_path = POSTERS_DIR / poster_filename
+            if poster_path.exists():
+                with open(poster_path, "rb") as f:
+                    image_data = f.read()
+                    cursor.execute(insert_poster, (movie_id, image_data))
         
         count += 1
         if count % 10 == 0:

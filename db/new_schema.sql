@@ -1,5 +1,6 @@
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS ratings;
+DROP TABLE IF EXISTS movie_posters;
 DROP TABLE IF EXISTS links;
 DROP TABLE IF EXISTS movies_metadata;
 DROP TABLE IF EXISTS movie_languages;
