@@ -12,6 +12,10 @@ This dataset will be used for showing posters of the images in the client
 
 We will be using version 8.4.6 of mysql as its the LTS veresion
 
-To run: \
+To run the backnd: \
 ```python -m db.load_data``` \
 ```uvicorn app.main:app --reload```
+
+To run the client: \
+```cd client``` \
+```npm run start```
