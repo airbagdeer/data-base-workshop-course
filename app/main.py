@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from app.routers import movies, search, analytics
-
 from fastapi.middleware.cors import CORSMiddleware
+
+from app.routers import analytics, movies, search
 
 app = FastAPI(
     title="Educational Movie API",

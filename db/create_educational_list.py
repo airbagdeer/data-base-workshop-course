@@ -1,7 +1,9 @@
-import pandas as pd
+import ast
 import json
 import os
-import ast
+
+import pandas as pd
+
 
 def get_genres(x):
     try:
@@ -40,7 +42,7 @@ def create_list():
                             'poster_file': poster_filename,
                             'popularity': float(row['popularity']) if pd.notnull(row['popularity']) else 0
                         })
-        except Exception as e:
+        except Exception:
             continue
             
     # Sort by popularity

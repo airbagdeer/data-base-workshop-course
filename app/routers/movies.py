@@ -1,11 +1,12 @@
-from fastapi import APIRouter, HTTPException, Query, Response
-from typing import List, Optional
+
+from fastapi import APIRouter, HTTPException, Response
+
 from app.database import get_db_connection
-from app.models import MovieBase, MovieDetail, Genre, CastMember, CrewMember, RatingCreate
+from app.models import MovieBase, MovieDetail, RatingCreate
 
 router = APIRouter()
 
-@router.get("/movies", response_model=List[MovieBase])
+@router.get("/movies", response_model=list[MovieBase])
 def get_movies(skip: int = 0, limit: int = 10):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)

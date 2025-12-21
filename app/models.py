@@ -1,6 +1,7 @@
-from pydantic import BaseModel
-from typing import List, Optional
 from datetime import date
+
+from pydantic import BaseModel
+
 
 class Genre(BaseModel):
     id: int
@@ -9,37 +10,37 @@ class Genre(BaseModel):
 class Person(BaseModel):
     id: int
     name: str
-    gender: Optional[int] = None
-    profile_path: Optional[str] = None
+    gender: int | None = None
+    profile_path: str | None = None
 
 class CastMember(Person):
-    character_name: Optional[str] = None
-    order_index: Optional[int] = None
+    character_name: str | None = None
+    order_index: int | None = None
 
 class CrewMember(Person):
-    job: Optional[str] = None
-    department: Optional[str] = None
+    job: str | None = None
+    department: str | None = None
 
 class RatingCreate(BaseModel):
     rating: float
-    order_index: Optional[int] = None
+    order_index: int | None = None
 
 class MovieBase(BaseModel):
     id: int
     title: str
-    original_title: Optional[str] = None
-    overview: Optional[str] = None
-    release_date: Optional[date] = None
-    runtime: Optional[float] = None
-    budget: Optional[int] = None
-    revenue: Optional[int] = None
-    popularity: Optional[float] = None
-    vote_average: Optional[float] = None
-    vote_count: Optional[int] = None
-    status: Optional[str] = None
-    tagline: Optional[str] = None
+    original_title: str | None = None
+    overview: str | None = None
+    release_date: date | None = None
+    runtime: float | None = None
+    budget: int | None = None
+    revenue: int | None = None
+    popularity: float | None = None
+    vote_average: float | None = None
+    vote_count: int | None = None
+    status: str | None = None
+    tagline: str | None = None
 
 class MovieDetail(MovieBase):
-    genres: List[Genre] = []
-    cast: List[CastMember] = []
-    crew: List[CrewMember] = []
+    genres: list[Genre] = []
+    cast: list[CastMember] = []
+    crew: list[CrewMember] = []

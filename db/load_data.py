@@ -1,8 +1,9 @@
-import pandas as pd
 import ast
-import os
 import json
 from pathlib import Path
+
+import pandas as pd
+
 from db.connect_to_db import connect_to_db
 
 # Define paths
@@ -26,7 +27,7 @@ def load_data():
 
     # 1. Re-create Schema
     print("Re-creating schema...")
-    with open(BASE_DIR / "db" / "new_schema.sql", "r") as f:
+    with open(BASE_DIR / "db" / "new_schema.sql") as f:
         schema_sql = f.read()
         # Split by semi-colon to execute multiple statements
         statements = schema_sql.split(';')
@@ -42,7 +43,7 @@ def load_data():
     
     # Load Educational Movies List
     print(f"Loading educational movies list from {EDUCATIONAL_LIST_PATH}...")
-    with open(EDUCATIONAL_LIST_PATH, "r") as f:
+    with open(EDUCATIONAL_LIST_PATH) as f:
         educational_movies = json.load(f)
         
     # Take top 100

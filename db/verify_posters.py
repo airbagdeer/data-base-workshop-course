@@ -1,5 +1,6 @@
 from db.connect_to_db import connect_to_db
 
+
 def verify():
     conn = connect_to_db()
     cursor = conn.cursor()

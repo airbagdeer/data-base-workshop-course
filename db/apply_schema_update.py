@@ -1,5 +1,6 @@
 from db.connect_to_db import connect_to_db
 
+
 def apply_update():
     print("Connecting to database...")
     conn = connect_to_db()

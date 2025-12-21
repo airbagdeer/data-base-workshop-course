@@ -1,5 +1,7 @@
-import pandas as pd
 import os
+
+import pandas as pd
+
 
 def inspect():
     print("--- movies_metadata.csv columns ---")
