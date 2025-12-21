@@ -1,0 +1,209 @@
+<div class="container">
+    <h1>Analytics Dashboard</h1>
+
+    <div class="section">
+        <h2>Popular Genres</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Genre</th>
+                    <th>Movie Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of popularGenres(); track item.genre) {
+                  <tr>
+                      <td>{{ item.genre }}</td>
+                      <td>{{ item.movie_count }}</td>
+                  </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Top Actors</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Actor</th>
+                    <th>Movie Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of topActors(); track item.actor_name) {
+                  <tr>
+                      <td>{{ item.actor_name }}</td>
+                      <td>{{ item.movie_count }}</td>
+                  </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Average Runtime by Genre</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Genre</th>
+                    <th>Avg Runtime (min)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of avgRuntime(); track item.genre) {
+                  <tr>
+                      <td>{{ item.genre }}</td>
+                      <td>{{ item.avg_runtime | number:'1.0-0' }}</td>
+                  </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Movie Flops (High Budget, Low Revenue)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Budget</th>
+                    <th>Revenue</th>
+                    <th>Loss</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of flops(); track item.title) {
+                  <tr>
+                      <td>{{ item.title }}</td>
+                      <td>{{ item.budget | number }}</td>
+                      <td>{{ item.revenue | number }}</td>
+                      <td>{{ item.loss | number }}</td>
+                  </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Directors Who Also Acted</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Person</th>
+                    <th>Movie</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of directorActors(); track item.name + item.title) {
+                  <tr>
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.title }}</td>
+                  </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Top Production Countries</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Country</th>
+                    <th>Movie Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of topCountries(); track item.name) {
+                  <tr>
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.movie_count }}</td>
+                  </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Movies with Most Keywords</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Keyword Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of keywordRichMovies(); track item.title) {
+                  <tr>
+                      <td>{{ item.title }}</td>
+                      <td>{{ item.keyword_count }}</td>
+                  </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Genre-Heavy Movies</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Genre Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of genreHeavyMovies(); track item.title) {
+                  <tr>
+                      <td>{{ item.title }}</td>
+                      <td>{{ item.genre_count }}</td>
+                  </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Best Year by Average Vote</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Avg Vote</th>
+                    <th>Movie Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of bestYear(); track item.year) {
+                  <tr>
+                      <td>{{ item.year }}</td>
+                      <td>{{ item.avg_vote | number:'1.2-2' }}</td>
+                      <td>{{ item.movie_count }}</td>
+                  </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Multiskilled Crew</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Department Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of multiskilledCrew(); track item.name) {
+                  <tr>
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.dept_count }}</td>
+                  </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
