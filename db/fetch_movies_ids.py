@@ -224,7 +224,7 @@
 import requests
 import time
 
-TMDB_BEARER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NmM1ZDI1YjAzOWNkMTg1NDkzNWI4N2I2NWYyYTI4MyIsIm5iZiI6MTc2NjQzMzYyMS4wOTc5OTk4LCJzdWIiOiI2OTQ5YTM1NTQ3YWQzOTJhYWE4ZWJmMGYiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.mdQsRpAI5Hi45y2JK4uQ54qR0DjOuqDk92LfUAHs8Lc"
+TMDB_BEARER_TOKEN = "enter-your-tmdb-bearer-token-here"
 
 SEARCH_URL = "https://api.themoviedb.org/3/search/movie"
 MOVIE_DETAILS_URL = "https://api.themoviedb.org/3/movie/{}"
