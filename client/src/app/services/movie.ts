@@ -19,7 +19,7 @@ export interface Movie {
 }
 
 export interface MovieDetail extends Movie {
-  genres: { id: number; name: string }[];
+  genres: string[];
   cast: { id: number; name: string; character: string; profile_path: string }[];
   crew: { id: number; name: string; job: string; department: string }[];
 }

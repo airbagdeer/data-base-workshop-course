@@ -36,19 +36,12 @@ CREATE TABLE IF NOT EXISTS movies (
     tagline VARCHAR(500)
 );
 
--- Genres table
-CREATE TABLE IF NOT EXISTS genres (
-    id INT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
-);
-
--- Movie Genres link table
+-- Movie Genres table (without separate genres table)
 CREATE TABLE IF NOT EXISTS movie_genres (
     movie_id INT,
-    genre_id INT,
-    PRIMARY KEY (movie_id, genre_id),
-    FOREIGN KEY (movie_id) REFERENCES movies(id),
-    FOREIGN KEY (genre_id) REFERENCES genres(id)
+    genre_name VARCHAR(100) NOT NULL,
+    PRIMARY KEY (movie_id, genre_name),
+    FOREIGN KEY (movie_id) REFERENCES movies(id)
 );
 
 -- People table (Actors, Directors, Crew)
@@ -126,19 +119,11 @@ CREATE TABLE IF NOT EXISTS movie_countries (
     FOREIGN KEY (country_code) REFERENCES production_countries(iso_3166_1)
 );
 
--- Spoken Languages table
-CREATE TABLE IF NOT EXISTS spoken_languages (
-    iso_639_1 VARCHAR(10) PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-);
-
--- Movie Languages link table
 CREATE TABLE IF NOT EXISTS movie_languages (
     movie_id INT,
-    language_code VARCHAR(10),
-    PRIMARY KEY (movie_id, language_code),
-    FOREIGN KEY (movie_id) REFERENCES movies(id),
-    FOREIGN KEY (language_code) REFERENCES spoken_languages(iso_639_1)
+    language_name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (movie_id, language_name),
+    FOREIGN KEY (movie_id) REFERENCES movies(id)
 );
 
 CREATE TABLE IF NOT EXISTS movie_posters (

@@ -14,8 +14,8 @@
               </div>
 
               <div class="genres">
-                  @for (g of movie.genres; track g.id) {
-                    <span class="badge">{{ g.name }}</span>
+                  @for (g of movie.genres; track g) {
+                    <span class="badge">{{ g }}</span>
                   }
               </div>
           </div>

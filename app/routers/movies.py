@@ -33,9 +33,8 @@ def get_movie_detail(movie_id: int):
     
     # Get genres
     cursor.execute("""
-        SELECT g.id, g.name 
-        FROM genres g 
-        JOIN movie_genres mg ON g.id = mg.genre_id 
+        SELECT mg.genre_name 
+        FROM movie_genres mg 
         WHERE mg.movie_id = %s
     """, (movie_id,))
     genres = cursor.fetchall()
@@ -62,7 +61,7 @@ def get_movie_detail(movie_id: int):
     cursor.close()
     conn.close()
     
-    movie['genres'] = genres
+    movie['genres'] = [g['genre_name'] for g in genres]
     movie['cast'] = cast
     movie['crew'] = crew
     

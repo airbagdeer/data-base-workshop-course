@@ -11,12 +11,11 @@ def popular_genres():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     query = """
-        SELECT g.name as genre, COUNT(mg.movie_id) as movie_count
-        FROM genres g
-        JOIN movie_genres mg ON g.id = mg.genre_id
-        GROUP BY g.name
+        SELECT genre_name AS genre, COUNT(movie_id) AS movie_count
+        FROM movie_genres
+        GROUP BY genre_name
         ORDER BY movie_count DESC
-        LIMIT 5
+        LIMIT 5;
     """
     cursor.execute(query)
     result = cursor.fetchall()
@@ -50,12 +49,11 @@ def avg_runtime_by_genre():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     query = """
-        SELECT g.name as genre, AVG(m.runtime) as avg_runtime
-        FROM genres g
-        JOIN movie_genres mg ON g.id = mg.genre_id
+        SELECT mg.genre_name AS genre, AVG(m.runtime) AS avg_runtime
+        FROM movie_genres mg
         JOIN movies m ON mg.movie_id = m.id
         WHERE m.runtime IS NOT NULL
-        GROUP BY g.name
+        GROUP BY mg.genre_name
         ORDER BY avg_runtime DESC
         LIMIT 10
     """
@@ -150,7 +148,7 @@ def history_war_movies():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     query = """
-        SELECT m.title, COUNT(mg.genre_id) as genre_count
+        SELECT m.title, COUNT(mg.genre_name) as genre_count
         FROM movies m
         JOIN movie_genres mg ON m.id = mg.movie_id
         GROUP BY m.id, m.title

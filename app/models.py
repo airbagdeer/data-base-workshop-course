@@ -2,11 +2,6 @@ from datetime import date
 
 from pydantic import BaseModel
 
-
-class Genre(BaseModel):
-    id: int
-    name: str
-
 class Person(BaseModel):
     id: int
     name: str
@@ -41,6 +36,6 @@ class MovieBase(BaseModel):
     tagline: str | None = None
 
 class MovieDetail(MovieBase):
-    genres: list[Genre] = []
+    genres: list[str] = []
     cast: list[CastMember] = []
     crew: list[CrewMember] = []

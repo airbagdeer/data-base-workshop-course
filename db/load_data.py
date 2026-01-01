@@ -81,8 +81,7 @@ def load_data():
         ON DUPLICATE KEY UPDATE title=VALUES(title)
     """
     
-    insert_genre = "INSERT IGNORE INTO genres (id, name) VALUES (%s, %s)"
-    insert_movie_genre = "INSERT IGNORE INTO movie_genres (movie_id, genre_id) VALUES (%s, %s)"
+    insert_movie_genre = "INSERT IGNORE INTO movie_genres (movie_id, genre_name) VALUES (%s, %s)"
     
     insert_person = "INSERT IGNORE INTO people (id, name, gender, profile_path) VALUES (%s, %s, %s, %s)"
     insert_cast = "INSERT IGNORE INTO cast_members (credit_id, movie_id, person_id, character_name, order_index) VALUES (%s, %s, %s, %s, %s)"
@@ -97,8 +96,7 @@ def load_data():
     insert_country = "INSERT IGNORE INTO production_countries (iso_3166_1, name) VALUES (%s, %s)"
     insert_movie_country = "INSERT IGNORE INTO movie_countries (movie_id, country_code) VALUES (%s, %s)"
     
-    insert_language = "INSERT IGNORE INTO spoken_languages (iso_639_1, name) VALUES (%s, %s)"
-    insert_movie_language = "INSERT IGNORE INTO movie_languages (movie_id, language_code) VALUES (%s, %s)"
+    insert_movie_language = "INSERT IGNORE INTO movie_languages (movie_id, language_name) VALUES (%s, %s)"
     
     insert_poster = "INSERT INTO movie_posters (movie_id, image) VALUES (%s, %s) ON DUPLICATE KEY UPDATE image=VALUES(image)"
 
@@ -131,8 +129,7 @@ def load_data():
         # Genres
         genres = parse_json_safe(row['genres'])
         for g in genres:
-            cursor.execute(insert_genre, (g['id'], g['name']))
-            cursor.execute(insert_movie_genre, (movie_id, g['id']))
+            cursor.execute(insert_movie_genre, (movie_id, g['name']))
             
         # Production Companies
         companies = parse_json_safe(row['production_companies'])
@@ -149,8 +146,7 @@ def load_data():
         # Spoken Languages
         languages = parse_json_safe(row['spoken_languages'])
         for l in languages:
-            cursor.execute(insert_language, (l['iso_639_1'], l['name']))
-            cursor.execute(insert_movie_language, (movie_id, l['iso_639_1']))
+            cursor.execute(insert_movie_language, (movie_id, l['name']))
 
         # Credits (Cast & Crew)
         movie_credits = credits_df[credits_df['id'] == movie_id]
