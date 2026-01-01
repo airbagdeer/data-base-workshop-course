@@ -32,6 +32,10 @@ export class MovieService {
 
   constructor(private http: HttpClient) { }
 
+  searchMovies(query: string): Observable<Movie[]> {
+    return this.http.get<Movie[]>(`${this.apiUrl}/search?q=${encodeURIComponent(query)}`);  
+  }
+
   getMovies(skip: number = 0, limit: number = 20): Observable<Movie[]> {
     return this.http.get<Movie[]>(`${this.apiUrl}/movies?skip=${skip}&limit=${limit}`);
   }

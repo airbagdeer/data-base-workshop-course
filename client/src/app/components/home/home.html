@@ -1,15 +1,27 @@
 <div class="container">
   <h1>Educational Movies</h1>
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <input
+      type="text"
+      placeholder="Search movies..."
+      [(ngModel)]="searchQuery"
+    />
+  </div>
+
   <div class="movie-grid">
-    @for (movie of movies(); track movie.id) {
-      <div class="movie-card" [routerLink]="['/movies', movie.id]">
-        <img [src]="getPoster(movie.id)" [alt]="movie.title" loading="lazy">
-        <div class="movie-info">
-          <h3>{{ movie.title }}</h3>
-          <p>{{ movie.release_date | date }}</p>
-          <span class="rating">★ {{ movie.vote_average }}</span>
-        </div>
+    <div
+      class="movie-card"
+      *ngFor="let movie of filteredMovies()"
+      [routerLink]="['/movies', movie.id]"
+    >
+      <img [src]="getPoster(movie.id)" [alt]="movie.title" loading="lazy" />
+      <div class="movie-info">
+        <h3>{{ movie.title }}</h3>
+        <p>{{ movie.release_date | date }}</p>
+        <span class="rating">★ {{ movie.vote_average }}</span>
       </div>
-    }
+    </div>
   </div>
 </div>

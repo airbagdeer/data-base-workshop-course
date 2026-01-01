@@ -1,3 +1,24 @@
+.search-bar {
+  margin: 20px 0;           /* top & bottom spacing only */
+  display: flex;
+  gap: 10px;
+  max-width: 400px;         /* limit width */
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-bar span {
+  color: #666;
+  font-size: 0.9em;
+  align-self: center;
+}
+
 .container {
   padding: 20px;
 }
