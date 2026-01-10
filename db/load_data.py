@@ -47,9 +47,9 @@ def load_data():
         educational_movies = json.load(f)
         
     # Take top 100
-    top_100_movies = educational_movies[:100]
-    target_ids = [int(m['id']) for m in top_100_movies]
-    poster_map = {int(m['id']): m['poster_file'] for m in top_100_movies}
+    top_movies = educational_movies
+    target_ids = [int(m['id']) for m in top_movies]
+    poster_map = {int(m['id']): m['poster_file'] for m in top_movies}
     
     print(f"Targeting top {len(target_ids)} educational movies.")
     
@@ -59,6 +59,9 @@ def load_data():
     movies_df['id'] = movies_df['id'].astype(int)
     
     movies_df = movies_df[movies_df['id'].isin(target_ids)]
+    
+    # Remove duplicate IDs (keep first occurrence)
+    movies_df = movies_df.drop_duplicates(subset=['id'], keep='first')
     
     # Sort to match the order in target_ids (popularity desc)
     movies_df = movies_df.set_index('id').reindex(target_ids).dropna(subset=['title']).reset_index()

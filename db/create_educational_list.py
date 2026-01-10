@@ -50,13 +50,13 @@ def create_list():
     educational_movies.sort(key=lambda x: x['popularity'], reverse=True)
     
     # Take top 200
-    top_200 = educational_movies[:200]
+    top_movies = educational_movies[:2000]
     
     # Save to JSON
     with open('data/educational_movies.json', 'w') as f:
-        json.dump(top_200, f, indent=2)
+        json.dump(top_movies, f, indent=2)
         
-    print(f"Saved top {len(top_200)} movies to data/educational_movies.json")
+    print(f"Saved top {len(top_movies)} movies to data/educational_movies.json")
 
 if __name__ == "__main__":
     create_list()
