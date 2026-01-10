@@ -41,7 +41,7 @@ def get_movie_detail(movie_id: int):
     
     # Get cast
     cursor.execute("""
-        SELECT p.id, p.name, p.gender, p.profile_path, c.character_name as `character`, c.order_index as `order`
+        SELECT p.id, p.name, p.gender, p.profile_path, c.character_name, c.order_index
         FROM people p
         JOIN cast_members c ON p.id = c.person_id
         WHERE c.movie_id = %s
@@ -87,7 +87,7 @@ def get_movie_poster(movie_id: int):
 @router.post("/movies/{movie_id}/rate")
 def rate_movie(movie_id: int, rating_data: RatingCreate):
     conn = get_db_connection()
-    cursor = conn.cursor()
+    cursor = conn.cursor(dictionary=True)
     
     # Check if movie exists
     cursor.execute("SELECT id FROM movies WHERE id = %s", (movie_id,))
@@ -95,14 +95,46 @@ def rate_movie(movie_id: int, rating_data: RatingCreate):
         cursor.close()
         conn.close()
         raise HTTPException(status_code=404, detail="Movie not found")
-        
-    # Insert rating
-    query = "INSERT INTO ratings (movie_id, rating) VALUES (%s, %s)"
-    cursor.execute(query, (movie_id, rating_data.rating))
+    
+    # Upsert rating (insert or update if user already rated)
+    query = """
+        INSERT INTO ratings (movie_id, user_id, rating) 
+        VALUES (%s, %s, %s)
+        ON DUPLICATE KEY UPDATE 
+            rating = VALUES(rating),
+            timestamp = CURRENT_TIMESTAMP
+    """
+    cursor.execute(query, (movie_id, rating_data.user_id, rating_data.rating))
+    conn.commit()
+    
+    # Recalculate vote_average and vote_count for this movie
+    cursor.execute("""
+        SELECT 
+            AVG(rating) as avg_rating,
+            COUNT(*) as vote_count
+        FROM ratings
+        WHERE movie_id = %s
+    """, (movie_id,))
+    
+    stats = cursor.fetchone()
+    vote_average = round(stats['avg_rating'], 1) if stats['avg_rating'] else 0
+    vote_count = stats['vote_count'] if stats['vote_count'] else 0
+    
+    # Update the movies table with new statistics
+    cursor.execute("""
+        UPDATE movies 
+        SET vote_average = %s, vote_count = %s
+        WHERE id = %s
+    """, (vote_average, vote_count, movie_id))
     conn.commit()
     
     cursor.close()
     conn.close()
     
-    return {"message": "Rating added successfully"}
+    return {
+        "message": "Rating submitted successfully",
+        "vote_average": vote_average,
+        "vote_count": vote_count
+    }
+
 

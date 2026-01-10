@@ -1,6 +1,6 @@
 from datetime import date
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class Person(BaseModel):
     id: int
@@ -17,8 +17,8 @@ class CrewMember(Person):
     department: str | None = None
 
 class RatingCreate(BaseModel):
-    rating: float
-    order_index: int | None = None
+    rating: int = Field(..., ge=0, le=10, description="Rating must be an integer between 0 and 10")
+    user_id: str = Field(..., min_length=1, description="Unique user identifier")
 
 class MovieBase(BaseModel):
     id: int

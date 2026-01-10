@@ -20,7 +20,7 @@ export interface Movie {
 
 export interface MovieDetail extends Movie {
   genres: string[];
-  cast: { id: number; name: string; character: string; profile_path: string }[];
+  cast: { id: number; name: string; character_name: string; profile_path: string }[];
   crew: { id: number; name: string; job: string; department: string }[];
 }
 
@@ -33,7 +33,7 @@ export class MovieService {
   constructor(private http: HttpClient) { }
 
   searchMovies(query: string): Observable<Movie[]> {
-    return this.http.get<Movie[]>(`${this.apiUrl}/search?q=${encodeURIComponent(query)}`);  
+    return this.http.get<Movie[]>(`${this.apiUrl}/search?q=${encodeURIComponent(query)}`);
   }
 
   getMovies(skip: number = 0, limit: number = 20): Observable<Movie[]> {
@@ -48,8 +48,11 @@ export class MovieService {
     return `${this.apiUrl}/movies/${id}/poster`;
   }
 
-  rateMovie(id: number, rating: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/movies/${id}/rate`, { rating });
+  rateMovie(id: number, rating: number, userId: string): Observable<{ message: string, vote_average: number, vote_count: number }> {
+    return this.http.post<{ message: string, vote_average: number, vote_count: number }>(
+      `${this.apiUrl}/movies/${id}/rate`,
+      { rating, user_id: userId }
+    );
   }
 
   // Analytics

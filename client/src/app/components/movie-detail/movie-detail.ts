@@ -29,9 +29,21 @@ export class MovieDetailComponent {
 
   readonly userRating = signal(0);
   readonly message = signal('');
+  private userId = '';
 
   constructor() {
+    this.userId = this.getUserId();
     this.loadMovieOnRouteChange();
+  }
+
+  private getUserId(): string {
+    // Get or generate user ID from localStorage
+    let userId = localStorage.getItem('cinelearn_user_id');
+    if (!userId) {
+      userId = 'user_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      localStorage.setItem('cinelearn_user_id', userId);
+    }
+    return userId;
   }
 
   private loadMovieOnRouteChange(): void {
@@ -41,7 +53,18 @@ export class MovieDetailComponent {
         switchMap(id => id ? this.movieService.getMovie(id) : of(null)),
         takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe(movie => this.movie.set(movie));
+      .subscribe(movie => {
+        this.movie.set(movie);
+        // Load user's existing rating if any
+        if (movie) {
+          const savedRating = localStorage.getItem(`rating_${movie.id}_${this.userId}`);
+          if (savedRating) {
+            this.userRating.set(Number(savedRating));
+          } else {
+            this.userRating.set(0);
+          }
+        }
+      });
   }
 
   private refreshMovie(id: number): void {
@@ -53,18 +76,25 @@ export class MovieDetailComponent {
   submitRating(): void {
     const movie = this.movie();
     const rating = Number(this.userRating());
-    if (movie && rating > 0 && rating <= 10) {
-      this.movieService.rateMovie(movie.id, rating)
+    if (movie && rating >= 0 && rating <= 10) {
+      this.movieService.rateMovie(movie.id, rating, this.userId)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: () => {
+          next: (response) => {
             this.message.set('Rating submitted successfully!');
-            this.refreshMovie(movie.id);
+            // Save user's rating to localStorage
+            localStorage.setItem(`rating_${movie.id}_${this.userId}`, rating.toString());
+            // Update movie data with new vote statistics
+            const updatedMovie = { ...movie, vote_average: response.vote_average, vote_count: response.vote_count };
+            this.movie.set(updatedMovie);
           },
           error: () => {
-            this.message.set('Error submitting rating.');
+            this.message.set('Rating should be a whole number between 0 and 10.');
           }
         });
+    } else if (rating < 0 || rating > 10) {
+      this.message.set('Please enter a rating between 0 and 10.');
     }
   }
 }
+
