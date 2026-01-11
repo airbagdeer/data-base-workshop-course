@@ -135,6 +135,7 @@ CREATE TABLE IF NOT EXISTS movie_posters (
 CREATE TABLE IF NOT EXISTS ratings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     movie_id INT,
+    user_id VARCHAR(255) NOT NULL,
     rating FLOAT,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (movie_id) REFERENCES movies(id)

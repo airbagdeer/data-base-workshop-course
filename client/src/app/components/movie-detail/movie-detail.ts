@@ -88,7 +88,8 @@ export class MovieDetailComponent {
             const updatedMovie = { ...movie, vote_average: response.vote_average, vote_count: response.vote_count };
             this.movie.set(updatedMovie);
           },
-          error: () => {
+          error: (e) => {
+            console.error('Error submitting rating:', e);
             this.message.set('Rating should be a whole number between 0 and 10.');
           }
         });

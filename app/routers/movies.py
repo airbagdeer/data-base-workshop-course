@@ -110,15 +110,18 @@ def rate_movie(movie_id: int, rating_data: RatingCreate):
     # Recalculate vote_average and vote_count for this movie
     cursor.execute("""
         SELECT 
-            AVG(rating) as avg_rating,
-            COUNT(*) as vote_count
-        FROM ratings
-        WHERE movie_id = %s
+            vote_average as avg_rating,
+            vote_count as vote_count
+        FROM movies
+        WHERE id = %s
     """, (movie_id,))
     
     stats = cursor.fetchone()
-    vote_average = round(stats['avg_rating'], 1) if stats['avg_rating'] else 0
-    vote_count = stats['vote_count'] if stats['vote_count'] else 0
+    print(stats)
+    print ((stats['avg_rating'] + rating_data.rating)/ (stats['vote_count'] + 1))
+    print(round((stats['avg_rating'] + rating_data.rating)/ (stats['vote_count'] + 1), 1))
+    vote_average = round((stats['avg_rating'] * stats['vote_count']+ rating_data.rating)/ (stats['vote_count'] + 1), 1) if (stats['avg_rating'] and stats['vote_count']) else rating_data.rating
+    vote_count = stats['vote_count']  + 1 if stats['vote_count'] else 1
     
     # Update the movies table with new statistics
     cursor.execute("""
