@@ -1,18 +1,11 @@
-
 from fastapi import APIRouter, Query
 
-from app.database import get_db_connection
+from app.repository import Repository
 from app.models import MovieBase
 
 router = APIRouter()
 
 @router.get("/search", response_model=list[MovieBase])
 def search_movies(q: str = Query(..., min_length=3)):
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
     query = "SELECT * FROM movies WHERE title LIKE %s"
-    cursor.execute(query, (f"%{q}%",))
-    movies = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return movies
+    return Repository.fetch_all(query, (f"%{q}%",))

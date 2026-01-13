@@ -1,65 +1,46 @@
-
 from fastapi import APIRouter, HTTPException, Response
 
-from app.database import get_db_connection
+from app.repository import Repository
 from app.models import MovieBase, MovieDetail, RatingCreate
 
 router = APIRouter()
 
 @router.get("/movies", response_model=list[MovieBase])
 def get_movies(skip: int = 0, limit: int = 10):
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
     query = "SELECT * FROM movies LIMIT %s OFFSET %s"
-    cursor.execute(query, (limit, skip))
-    movies = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return movies
+    return Repository.fetch_all(query, (limit, skip))
 
 @router.get("/movies/{movie_id}", response_model=MovieDetail)
 def get_movie_detail(movie_id: int):
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-    
     # Get movie info
-    cursor.execute("SELECT * FROM movies WHERE id = %s", (movie_id,))
-    movie = cursor.fetchone()
+    movie = Repository.fetch_one("SELECT * FROM movies WHERE id = %s", (movie_id,))
     
     if not movie:
-        cursor.close()
-        conn.close()
         raise HTTPException(status_code=404, detail="Movie not found")
     
     # Get genres
-    cursor.execute("""
+    genres = Repository.fetch_all("""
         SELECT mg.genre_name 
         FROM movie_genres mg 
         WHERE mg.movie_id = %s
     """, (movie_id,))
-    genres = cursor.fetchall()
     
     # Get cast
-    cursor.execute("""
+    cast = Repository.fetch_all("""
         SELECT p.id, p.name, p.gender, p.profile_path, c.character_name, c.order_index
         FROM people p
         JOIN cast_members c ON p.id = c.person_id
         WHERE c.movie_id = %s
         ORDER BY c.order_index
     """, (movie_id,))
-    cast = cursor.fetchall()
     
     # Get crew
-    cursor.execute("""
+    crew = Repository.fetch_all("""
         SELECT p.id, p.name, p.gender, p.profile_path, c.job, c.department
         FROM people p
         JOIN crew_members c ON p.id = c.person_id
         WHERE c.movie_id = %s
     """, (movie_id,))
-    crew = cursor.fetchall()
-    
-    cursor.close()
-    conn.close()
     
     movie['genres'] = [g['genre_name'] for g in genres]
     movie['cast'] = cast
@@ -69,31 +50,19 @@ def get_movie_detail(movie_id: int):
 
 @router.get("/movies/{movie_id}/poster")
 def get_movie_poster(movie_id: int):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
     query = "SELECT image FROM movie_posters WHERE movie_id = %s"
-    cursor.execute(query, (movie_id,))
-    result = cursor.fetchone()
-    
-    cursor.close()
-    conn.close()
+    result = Repository.fetch_one(query, (movie_id,))
     
     if not result:
         raise HTTPException(status_code=404, detail="Poster not found")
         
-    return Response(content=result[0], media_type="image/jpeg")
+    return Response(content=result['image'], media_type="image/jpeg")
 
 @router.post("/movies/{movie_id}/rate")
 def rate_movie(movie_id: int, rating_data: RatingCreate):
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-    
     # Check if movie exists
-    cursor.execute("SELECT id FROM movies WHERE id = %s", (movie_id,))
-    if not cursor.fetchone():
-        cursor.close()
-        conn.close()
+    movie = Repository.fetch_one("SELECT id FROM movies WHERE id = %s", (movie_id,))
+    if not movie:
         raise HTTPException(status_code=404, detail="Movie not found")
     
     # Upsert rating (insert or update if user already rated)
@@ -104,11 +73,10 @@ def rate_movie(movie_id: int, rating_data: RatingCreate):
             rating = VALUES(rating),
             timestamp = CURRENT_TIMESTAMP
     """
-    cursor.execute(query, (movie_id, rating_data.user_id, rating_data.rating))
-    conn.commit()
+    Repository.execute(query, (movie_id, rating_data.user_id, rating_data.rating))
     
-    # Recalculate vote_average and vote_count for this movie
-    cursor.execute("""
+    # Get current vote statistics
+    stats = Repository.fetch_one("""
         SELECT 
             vote_average as avg_rating,
             vote_count as vote_count
@@ -116,28 +84,18 @@ def rate_movie(movie_id: int, rating_data: RatingCreate):
         WHERE id = %s
     """, (movie_id,))
     
-    stats = cursor.fetchone()
-    print(stats)
-    print ((stats['avg_rating'] + rating_data.rating)/ (stats['vote_count'] + 1))
-    print(round((stats['avg_rating'] + rating_data.rating)/ (stats['vote_count'] + 1), 1))
-    vote_average = round((stats['avg_rating'] * stats['vote_count']+ rating_data.rating)/ (stats['vote_count'] + 1), 1) if (stats['avg_rating'] and stats['vote_count']) else rating_data.rating
-    vote_count = stats['vote_count']  + 1 if stats['vote_count'] else 1
+    vote_average = round((stats['avg_rating'] * stats['vote_count'] + rating_data.rating) / (stats['vote_count'] + 1), 1) if (stats['avg_rating'] and stats['vote_count']) else rating_data.rating
+    vote_count = stats['vote_count'] + 1 if stats['vote_count'] else 1
     
     # Update the movies table with new statistics
-    cursor.execute("""
+    Repository.execute("""
         UPDATE movies 
         SET vote_average = %s, vote_count = %s
         WHERE id = %s
     """, (vote_average, vote_count, movie_id))
-    conn.commit()
-    
-    cursor.close()
-    conn.close()
     
     return {
         "message": "Rating submitted successfully",
         "vote_average": vote_average,
         "vote_count": vote_count
     }
-
-
