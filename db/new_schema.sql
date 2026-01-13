@@ -119,13 +119,6 @@ CREATE TABLE IF NOT EXISTS movie_countries (
     FOREIGN KEY (country_code) REFERENCES production_countries(iso_3166_1)
 );
 
-CREATE TABLE IF NOT EXISTS movie_languages (
-    movie_id INT,
-    language_name VARCHAR(255) NOT NULL,
-    PRIMARY KEY (movie_id, language_name),
-    FOREIGN KEY (movie_id) REFERENCES movies(id)
-);
-
 CREATE TABLE IF NOT EXISTS movie_posters (
     movie_id INT PRIMARY KEY,
     image LONGBLOB,

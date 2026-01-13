@@ -98,9 +98,7 @@ def load_data():
     
     insert_country = "INSERT IGNORE INTO production_countries (iso_3166_1, name) VALUES (%s, %s)"
     insert_movie_country = "INSERT IGNORE INTO movie_countries (movie_id, country_code) VALUES (%s, %s)"
-    
-    insert_movie_language = "INSERT IGNORE INTO movie_languages (movie_id, language_name) VALUES (%s, %s)"
-    
+        
     insert_poster = "INSERT INTO movie_posters (movie_id, image) VALUES (%s, %s) ON DUPLICATE KEY UPDATE image=VALUES(image)"
 
     count = 0
@@ -146,11 +144,6 @@ def load_data():
             cursor.execute(insert_country, (c['iso_3166_1'], c['name']))
             cursor.execute(insert_movie_country, (movie_id, c['iso_3166_1']))
             
-        # Spoken Languages
-        languages = parse_json_safe(row['spoken_languages'])
-        for l in languages:
-            cursor.execute(insert_movie_language, (movie_id, l['name']))
-
         # Credits (Cast & Crew)
         movie_credits = credits_df[credits_df['id'] == movie_id]
         if not movie_credits.empty:
