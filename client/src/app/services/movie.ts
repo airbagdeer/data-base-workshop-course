@@ -36,8 +36,8 @@ export class MovieService {
     return this.http.get<Movie[]>(`${this.apiUrl}/search?q=${encodeURIComponent(query)}`);
   }
 
-  getMovies(skip: number = 0, limit: number = 20): Observable<Movie[]> {
-    return this.http.get<Movie[]>(`${this.apiUrl}/movies?skip=${skip}&limit=${limit}`);
+  getMovies(skip: number = 0, limit: number = 20): Observable<MovieDetail[]> {
+    return this.http.get<MovieDetail[]>(`${this.apiUrl}/movies?skip=${skip}&limit=${limit}`);
   }
 
   getMovie(id: number): Observable<MovieDetail> {

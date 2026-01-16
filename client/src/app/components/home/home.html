@@ -14,8 +14,22 @@
   </div>
 </div>
 
-<!-- Movie Grid -->
+<!-- Genre Filter Section -->
 <div class="container">
+  <div class="genre-filter-section">
+    <h3 class="filter-title">Filter by Genre</h3>
+    <div class="genre-chips">
+      <button 
+        *ngFor="let genre of availableGenres()" 
+        class="genre-chip"
+        [class.active]="isGenreSelected(genre)"
+        (click)="toggleGenre(genre)">
+        {{ genre }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Movie Grid -->
   <div class="movie-grid">
     <div class="movie-card" *ngFor="let movie of filteredMovies()" [routerLink]="['/movies', movie.id]">
       <div class="poster-container">
@@ -33,7 +47,7 @@
   @if (filteredMovies().length === 0) {
   <div class="empty-state">
     <h3>No movies found</h3>
-    <p>Try adjusting your search query</p>
+    <p>Try adjusting your search query or genre filters</p>
   </div>
   }
 </div>

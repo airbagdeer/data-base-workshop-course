@@ -3,12 +3,68 @@ from fastapi import APIRouter, HTTPException, Response
 from app.repository import Repository
 from app.models import MovieBase, MovieDetail, RatingCreate
 
+from collections import defaultdict
+
 router = APIRouter()
 
-@router.get("/movies", response_model=list[MovieBase])
+@router.get("/movies", response_model=list[MovieDetail])
 def get_movies(skip: int = 0, limit: int = 10):
-    query = "SELECT * FROM movies LIMIT %s OFFSET %s"
-    return Repository.fetch_all(query, (limit, skip))
+    movies = Repository.fetch_all(
+        "SELECT * FROM movies LIMIT %s OFFSET %s", 
+        (limit, skip)
+    )
+    
+    if not movies:
+        return []
+    
+    movie_ids = [m['id'] for m in movies]
+    placeholders = ','.join(['%s'] * len(movie_ids))
+
+    genres_data = Repository.fetch_all(f"""
+        SELECT mg.movie_id, mg.genre_name 
+        FROM movie_genres mg 
+        WHERE mg.movie_id IN ({placeholders})
+    """, movie_ids)
+    
+    cast_data = Repository.fetch_all(f"""
+        SELECT c.movie_id, p.id, p.name, p.gender, p.profile_path, 
+               c.character_name, c.order_index
+        FROM people p
+        JOIN cast_members c ON p.id = c.person_id
+        WHERE c.movie_id IN ({placeholders})
+        ORDER BY c.movie_id, c.order_index
+    """, movie_ids)
+    
+    crew_data = Repository.fetch_all(f"""
+        SELECT c.movie_id, p.id, p.name, p.gender, p.profile_path, 
+               c.job, c.department
+        FROM people p
+        JOIN crew_members c ON p.id = c.person_id
+        WHERE c.movie_id IN ({placeholders})
+    """, movie_ids)
+    
+    genres_by_movie = defaultdict(list)
+    cast_by_movie = defaultdict(list)
+    crew_by_movie = defaultdict(list)
+    
+    for g in genres_data:
+        genres_by_movie[g['movie_id']].append(g['genre_name'])
+    
+    for c in cast_data:
+        movie_id = c.pop('movie_id')
+        cast_by_movie[movie_id].append(c)
+    
+    for c in crew_data:
+        movie_id = c.pop('movie_id')
+        crew_by_movie[movie_id].append(c)
+    
+    for movie in movies:
+        movie_id = movie['id']
+        movie['genres'] = genres_by_movie[movie_id]
+        movie['cast'] = cast_by_movie[movie_id]
+        movie['crew'] = crew_by_movie[movie_id]
+    print(movies[0])
+    return movies
 
 @router.get("/movies/{movie_id}", response_model=MovieDetail)
 def get_movie_detail(movie_id: int):
