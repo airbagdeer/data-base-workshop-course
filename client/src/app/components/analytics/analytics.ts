@@ -1,9 +1,9 @@
-import { Component, inject, AfterViewInit, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { Component, inject, AfterViewInit, ViewChildren, QueryList, ElementRef, DestroyRef} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MovieService } from '../../services/movie';
 import { Chart, registerables } from 'chart.js';
-import { forkJoin, pipe, first} from 'rxjs';
+import { forkJoin, pipe} from 'rxjs';
 
 Chart.register(...registerables);
 
@@ -18,6 +18,7 @@ Chart.register(...registerables);
 export class AnalyticsComponent implements AfterViewInit {
   
   @ViewChildren('chartCanvas') chartCanvases!: QueryList<ElementRef<HTMLCanvasElement>>;
+  private readonly destroyRef = inject(DestroyRef);
   
   private readonly movieService = inject(MovieService);
   private charts: Chart[] = [];
@@ -92,7 +93,7 @@ export class AnalyticsComponent implements AfterViewInit {
 
   ngOnDestroy() {
      this.chartsReady$
-    .pipe(first())
+     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe(() => this.createCharts());
   }
 
@@ -207,6 +208,9 @@ export class AnalyticsComponent implements AfterViewInit {
         }]
       );
     }
+    else {
+        console.warn('No data available for Multiskilled Crew chart.');
+      }
   }
 
   private createBarChart(canvas: HTMLCanvasElement, labels: string[], datasets: any[]) {
