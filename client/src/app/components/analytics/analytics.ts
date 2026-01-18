@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MovieService } from '../../services/movie';
 import { Chart, registerables } from 'chart.js';
+import { forkJoin, pipe, first} from 'rxjs';
 
 Chart.register(...registerables);
 
@@ -13,11 +14,26 @@ Chart.register(...registerables);
   templateUrl: './analytics.html',
   styleUrl: './analytics.css'
 })
+
 export class AnalyticsComponent implements AfterViewInit {
+  
   @ViewChildren('chartCanvas') chartCanvases!: QueryList<ElementRef<HTMLCanvasElement>>;
   
   private readonly movieService = inject(MovieService);
   private charts: Chart[] = [];
+
+  private readonly chartsReady$ = forkJoin({
+  popularGenres: this.movieService.getPopularGenres(),
+  topActors: this.movieService.getTopActors(),
+  avgRuntime: this.movieService.getAverageRuntime(),
+  flops: this.movieService.getFlops(),
+  directorActors: this.movieService.getDirectorActors(),
+  topCountries: this.movieService.getTopProductionCountries(),
+  keywordRichMovies: this.movieService.getKeywordRichMovies(),
+  genreHeavyMovies: this.movieService.getGenreHeavyMovies(),
+  bestYear: this.movieService.getBestYear(),
+  multiskilledCrew: this.movieService.getMultiskilledCrew()
+});
 
   readonly popularGenres = toSignal(
     this.movieService.getPopularGenres(),
@@ -75,7 +91,9 @@ export class AnalyticsComponent implements AfterViewInit {
   }
 
   ngOnDestroy() {
-    this.charts.forEach(chart => chart.destroy());
+     this.chartsReady$
+    .pipe(first())
+    .subscribe(() => this.createCharts());
   }
 
   private createCharts() {

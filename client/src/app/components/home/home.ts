@@ -21,7 +21,6 @@ export class HomeComponent {
 
   constructor() {
     firstValueFrom(this.movieService.getMovies(0, 100)).then(movies => {
-      console.dir(movies);
       this.movies.set(movies);
     });
   }
