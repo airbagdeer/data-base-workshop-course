@@ -45,6 +45,7 @@ First, make sure mysql is running, and update the .env file with your mysql cred
 #### For the dev - Itay and Eyal use this: 
 ```python -m db.load_data```
 #### For the testers that want to look at the project use this:
+download the dump file from drive: `https://drive.google.com/drive/u/0/folders/1tTMI06VPScYCslDdmBfGVObhylrowA8g`
 ```python -m db.init_db_from_dump dump_file.sql```
 
 ### To run the backnd: 
