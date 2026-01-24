@@ -41,8 +41,11 @@ Then, install the dependences: \
 
 First, make sure mysql is running, and update the .env file with your mysql credentials.
 
-### Creating the database (Run this only once): 
-```python -m db.load_data``` 
+### Creating the database (Run this only once):
+#### For the dev - Itay and Eyal use this: 
+```python -m db.load_data```
+#### For the testers that want to look at the project use this:
+```python -m db.init_db_from_dump dump_file.sql```
 
 ### To run the backnd: 
 ```uvicorn app.main:app --reload``` 
