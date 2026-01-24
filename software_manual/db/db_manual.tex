@@ -1,0 +1,142 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{textcomp}
+
+\geometry{a4paper, margin=1in}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    upquote=true,
+    extendedchars=true
+}
+
+\lstset{style=mystyle}
+
+\title{Database Schema Manual}
+\author{324827328, 213713522}
+\date{}
+
+\begin{document}
+
+\ifdefined\maindoc
+\else
+  \maketitle
+  \tableofcontents
+  \newpage
+\fi
+
+\section{Introduction}
+The database design was a critical component of the project, establishing a foundation for API performance and application integrity. We aimed for a normalized schema to minimize redundancy while maintaining the flexibility required for analytical queries. MySQL 8.4 was selected for its reliability and support for referential integrity.
+
+\section{The Core Entities}
+
+\subsection{Movies}
+The \texttt{movies} table is the central entity of the database. We explicitly included \texttt{vote\_average} and \texttt{vote\_count} fields in this table.
+
+This denormalization strategy was chosen to optimize read performance. Instead of calculating averages from the \texttt{ratings} table for every query, we maintain these aggregated values transactionally.
+
+\begin{lstlisting}[language=SQL, caption=The heart of the system]
+CREATE TABLE IF NOT EXISTS movies (
+    id INT PRIMARY KEY,
+    title VARCHAR(500) NOT NULL,
+    -- We keep the aggregated stats right here for speed
+    vote_average FLOAT,
+    vote_count INT,
+    -- ... other metadata
+    budget BIGINT,
+    revenue BIGINT,
+    status VARCHAR(50)
+);
+\end{lstlisting}
+
+\subsection{People}
+We unified actors, directors, and writers into a single \texttt{people} table. This approach avoids data duplication for individuals who fulfill multiple roles (e.g., both acting and directing).
+
+\begin{lstlisting}[language=SQL, caption=A unified People table]
+CREATE TABLE IF NOT EXISTS people (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    gender INT, 
+    profile_path VARCHAR(255)
+);
+\end{lstlisting}
+
+\section{Connecting the Dots: Relationships}
+The database relational structure defines the connections between entities.
+
+\subsection{The Cast \& Crew}
+Connecting \texttt{movies} to \texttt{people} required more than a simple link. We needed to know \textit{what role} they played.
+For the \textbf{Cast}, we stored the \texttt{character\_name} and an \texttt{order\_index}. The index is crucial because it allows the frontend to validly display the "Top Billed" actors first, rather than a random alphabetical list.
+For the \textbf{Crew}, it's about the \texttt{job} and \texttt{department}. This granular detail allows us to answer interesting questions like "Which directors also acted in their own movies?"
+
+\begin{lstlisting}[language=SQL, caption=Linking People to Movies]
+CREATE TABLE IF NOT EXISTS cast_members (
+    credit_id VARCHAR(255) PRIMARY KEY,
+    movie_id INT,
+    person_id INT,
+    character_name VARCHAR(500),
+    order_index INT,
+    FOREIGN KEY (movie_id) REFERENCES movies(id),
+    FOREIGN KEY (person_id) REFERENCES people(id)
+);
+\end{lstlisting}
+
+\subsection{Categorization (Genres, Keywords)}
+We handled categories like Genres and Keywords as Many-to-Many relationships. This means a movie can be both "Action" and "Comedy". We separated the names into their own lookup tables (\texttt{genres}, \texttt{keywords}) and used junction tables (\texttt{movie\_genres}) to link them. This makes searching for "All Action movies" incredibly fast because it's just a simple index lookup.
+
+\section{User Interaction}
+
+\subsection{Ratings}
+We built the \texttt{ratings} table to capture the user voice. We decided to use a string-based \texttt{user\_id} to align with our "Soft Session" strategy on the client. This table grows the fastest, so we kept it lightweight: just who, what, what score, and when.
+
+\begin{lstlisting}[language=SQL, caption=Capturing user votes]
+CREATE TABLE IF NOT EXISTS ratings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    movie_id INT,
+    user_id VARCHAR(255) NOT NULL,
+    rating FLOAT,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (movie_id) REFERENCES movies(id)
+);
+\end{lstlisting}
+
+\section{Binary Storage}
+
+\subsection{Storing Images in the DB}
+We opted to store movie posters directly in the database using the \texttt{LONGBLOB} data type.
+While external storage (like S3) is a common pattern, storing images within the database ensures the dataset is self-contained. This simplifies backup and deployment procedures by keeping the entire application state in a single location.
+
+\begin{lstlisting}[language=SQL, caption=Self-contained image storage]
+CREATE TABLE IF NOT EXISTS movie_posters (
+    movie_id INT PRIMARY KEY,
+    image LONGBLOB,
+    FOREIGN KEY (movie_id) REFERENCES movies(id)
+);
+\end{lstlisting}
+
+\end{document}

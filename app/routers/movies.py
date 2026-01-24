@@ -122,6 +122,13 @@ def rate_movie(movie_id: int, rating_data: RatingCreate):
         raise HTTPException(status_code=404, detail="Movie not found")
     
     # Upsert rating (insert or update if user already rated)
+    # Check if user already rated
+    existing_rating = Repository.fetch_one("""
+        SELECT rating FROM ratings 
+        WHERE movie_id = %s AND user_id = %s
+    """, (movie_id, rating_data.user_id))
+    
+    # Upsert rating
     query = """
         INSERT INTO ratings (movie_id, user_id, rating) 
         VALUES (%s, %s, %s)
@@ -131,7 +138,10 @@ def rate_movie(movie_id: int, rating_data: RatingCreate):
     """
     Repository.execute(query, (movie_id, rating_data.user_id, rating_data.rating))
     
-    # Get current vote statistics
+    # Get current vote statistics (before this update/insert affects the aggregate if we read directly from movies, 
+    # but we need to know if it was an update or insert to adjust properly. 
+    # Actually, simpler to just recalculate from movies table knowing if we added a vote or not)
+    
     stats = Repository.fetch_one("""
         SELECT 
             vote_average as avg_rating,
@@ -140,9 +150,25 @@ def rate_movie(movie_id: int, rating_data: RatingCreate):
         WHERE id = %s
     """, (movie_id,))
     
-    vote_average = round((stats['avg_rating'] * stats['vote_count'] + rating_data.rating) / (stats['vote_count'] + 1), 1) if (stats['avg_rating'] and stats['vote_count']) else rating_data.rating
-    vote_count = stats['vote_count'] + 1 if stats['vote_count'] else 1
+    current_avg = stats['avg_rating'] or 0
+    current_count = stats['vote_count'] or 0
     
+    if existing_rating:
+        # Update existing vote
+        old_rating = existing_rating['rating']
+        # Avoid division by zero if count is somehow 0 (shouldn't happen if rating exists)
+        effective_count = max(current_count, 1) 
+        current_total = current_avg * effective_count
+        new_total = current_total - old_rating + rating_data.rating
+        vote_average = round(new_total / effective_count, 1)
+        vote_count = effective_count
+    else:
+        # New vote
+        current_total = current_avg * current_count
+        new_total = current_total + rating_data.rating
+        vote_count = current_count + 1
+        vote_average = round(new_total / vote_count, 1)
+
     # Update the movies table with new statistics
     Repository.execute("""
         UPDATE movies 

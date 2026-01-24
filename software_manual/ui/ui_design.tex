@@ -1,0 +1,48 @@
+\ifdefined\maindoc
+\else
+  \documentclass{report}
+  \usepackage[utf8]{inputenc}
+  \usepackage{graphicx}
+  \title{Bonus: Exceptional UI Design}
+  \author{324827328, 213713522}
+  \date{}
+  \begin{document}
+  \maketitle
+\fi
+
+\chapter{Bonus: Exceptional UI Design}
+
+\section{Philosophy}
+The design objective was to create a modern, user-friendly interface comparable to commercial streaming platforms, moving beyond standard administrative layouts.
+
+\section{Visual Identity}
+\subsection{Glassmorphism}
+We utilized a modern "Glassmorphism" aesthetic. By using semi-transparent backgrounds with background blur filters, we created a sense of depth and hierarchy. The movie cards are visually distinguished from the background, separating the foreground content from the ambient background to enhance user focus. We specifically chose this style, because apple recently updated all there devices to this style, and we wanted to learn how to build it ourselves.
+
+\subsection{Micro-Interactions}
+Subtle hover effects were implemented on interactive elements. Buttons elevate slightly, and movie posters illuminate upon interaction. These micro-interactions provide tactile feedback, enhancing the responsiveness of the application.
+
+\subsection{Color Palette}
+We selected a curated palette of deep midnight blues for the background and vibrant accents for actions, replacing standard primary colors. This dark mode-first approach reduces eye strain and highlights the movie artwork.
+
+\section{Evolution}
+The journey to this design wasn't immediate. We started with a functional but stark layout and iterated towards the polished version we have today.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../ui/images/old_ui.png}
+    \caption{The initial functional prototype.}
+    \label{fig:old_ui}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../ui/images/new_ui.png}
+    \caption{The final design with rich imagery and dark mode.}
+    \label{fig:new_ui}
+\end{figure}
+
+\ifdefined\maindoc
+\else
+  \end{document}
+\fi
