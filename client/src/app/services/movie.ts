@@ -28,7 +28,7 @@ export interface MovieDetail extends Movie {
   providedIn: 'root'
 })
 export class MovieService {
-  private apiUrl = 'http://localhost:8000';
+  private apiUrl = 'http://localhost:8321';
 
   constructor(private http: HttpClient) { }
 
