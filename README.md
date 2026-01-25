@@ -49,9 +49,12 @@ download the dump file from drive: `https://drive.google.com/drive/u/0/folders/1
 ```python -m db.init_db_from_dump dump_file.sql```
 
 ### To run the backnd: 
-```uvicorn app.main:app --reload``` 
+```uvicorn app.main:app --reload --port 8321``` 
 
 ### To run the client: 
 Do this in a different terminal from the terminal running the backend. 
 ```cd client``` \
 ```npm run start```
+
+### Access the app:
+Go to `http://localhost:4321` to get the main page :)
