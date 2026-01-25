@@ -37,6 +37,7 @@ First, cd into the client folder: \
 ```cd client``` \
 Then, install the dependences: \
 ```npm install```
+and lastly  ```cd ..```
 
 # To run the project:
 
