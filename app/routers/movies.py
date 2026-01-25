@@ -63,7 +63,6 @@ def get_movies(skip: int = 0, limit: int = 10):
         movie['genres'] = genres_by_movie[movie_id]
         movie['cast'] = cast_by_movie[movie_id]
         movie['crew'] = crew_by_movie[movie_id]
-    print(movies[0])
     return movies
 
 @router.get("/movies/{movie_id}", response_model=MovieDetail)
