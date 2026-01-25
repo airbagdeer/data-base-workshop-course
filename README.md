@@ -29,7 +29,8 @@ https://nodejs.org/en/download/
 ### Installing python dependences:
 ```uv sync```
 Then, make sure your python is using the created environment: \
-```source .venv/bin/activate```
+- for mac \ linux: ```source .venv/bin/activate```
+- for win: ```.\.venv\Scripts\activate```
 
 ### Installing node dependences: 
 First, cd into the client folder: \
@@ -56,5 +57,5 @@ Do this in a different terminal from the terminal running the backend.
 ```cd client``` \
 ```npm run start```
 
-### Access the app:
+### Access the app: 
 Go to `http://localhost:4321` to get the main page :)
