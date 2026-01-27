@@ -22,11 +22,11 @@
 \contentsline {subsection}{\numberline {2.2.2}FastAPI}{6}{subsection.2.2.2}%
 \contentsline {subsection}{\numberline {2.2.3}Uvicorn}{6}{subsection.2.2.3}%
 \contentsline {subsection}{\numberline {2.2.4}MySQL Connector}{6}{subsection.2.2.4}%
-\contentsline {subsection}{\numberline {2.2.5}Pandas}{6}{subsection.2.2.5}%
+\contentsline {subsection}{\numberline {2.2.5}Pandas}{7}{subsection.2.2.5}%
 \contentsline {subsection}{\numberline {2.2.6}Python-Dotenv}{7}{subsection.2.2.6}%
 \contentsline {section}{\numberline {2.3}Core Infrastructure}{7}{section.2.3}%
 \contentsline {subsection}{\numberline {2.3.1}The Entry Point (\texttt {main.py})}{7}{subsection.2.3.1}%
-\contentsline {subsection}{\numberline {2.3.2}The Data Access Layer}{7}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.2}The Data Access Layer (DAL)}{7}{subsection.2.3.2}%
 \contentsline {section}{\numberline {2.4}How It Works: API Modules}{7}{section.2.4}%
 \contentsline {subsection}{\numberline {2.4.1}Movies Router (\texttt {routers/movies.py})}{7}{subsection.2.4.1}%
 \contentsline {subsubsection}{The Rating Transaction}{8}{section*.5}%

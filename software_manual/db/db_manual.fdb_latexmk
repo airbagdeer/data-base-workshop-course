@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1769020366.73958 "/Users/eyal/Documents/data-base-workshop-course/software_manual/db/db_manual.tex" "db_manual.pdf" "db_manual" 1769020367.23904 0
+["pdflatex"] 1769536790.56769 "/Users/eyal/Documents/data-base-workshop-course/software_manual/db/db_manual.tex" "db_manual.pdf" "db_manual" 1769536791.0823 0
   "/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ecbx1000.tfm" 1749112185.01532 3200 328792ff19833a39406f06fa0555a6dc ""
   "/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ecbx1200.tfm" 1749112185.01584 3200 b8d69bc738e5ef3e08cefeef3109ff56 ""
   "/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ecbx1440.tfm" 1749112185.01617 3196 0b37fa3083e15c57cfa8c4ff52f2807a ""
@@ -50,8 +50,8 @@
   "/Library/Application Support/MiKTeX/texmfs/install/tex/latex/listings/lstpatch.sty" 1749112203.50451 353 9024412f43e92cd5b21fe9ded82d0610 ""
   "/Library/Application Support/MiKTeX/texmfs/install/tex/latex/url/url.sty" 1749112252.2674 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "/Library/Application Support/MiKTeX/texmfs/install/tex/latex/xcolor/xcolor.sty" 1749112252.48098 55384 b454dec21c2d9f45ec0b793f0995b992 ""
-  "/Users/eyal/Documents/data-base-workshop-course/software_manual/db/db_manual.tex" 1769020366.15188 6235 5f7ce20969116fe902042c10b981959a ""
-  "/Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/map/pdftex/pdftex.map" 1767794141.07575 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
+  "/Users/eyal/Documents/data-base-workshop-course/software_manual/db/db_manual.tex" 1769536789.95209 5496 023623708f21e1de47e2b0423dde2db2 ""
+  "/Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/map/pdftex/pdftex.map" 1769020427.44359 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1000.pk" 1769018328.54395 25420 eeec83c8760883fd346565e5a3331437 ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1200.pk" 1769018326.84398 31952 f6c862470cfe6628cfb2ea90affaccb3 ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1440.pk" 1769018329.37794 40136 df1a2c1772ae90e3e4a19e7a6386fd4f ""
@@ -80,10 +80,10 @@
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/kvsetkeys/kvsetkeys.sty" 1749378062.63479 13815 760b0c02f691ea230f5359c4e1de23a7 ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/refcount/refcount.sty" 1752752217.53113 9878 9e94e8fa600d95f9c7731bb21dfb67a4 ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/rerunfilecheck/rerunfilecheck.sty" 1752752224.04051 9684 a33a14b82ce60d6e77cb9be689d79ee6 ""
-  "db_manual.aux" 1769020367.15096 2106 1662718061731a4cb1c1a7353b1dc579 "pdflatex"
-  "db_manual.out" 1769020367.15146 1536 ba67558a0efe4252b1ccb6ba0d038fb6 "pdflatex"
-  "db_manual.tex" 1769020366.15188 6235 5f7ce20969116fe902042c10b981959a ""
-  "db_manual.toc" 1769020367.15198 861 149c454f76f5eb3a68c8172f1223ee92 "pdflatex"
+  "db_manual.aux" 1769536790.99563 2106 9b29714ae0e2c9e2860346b7dc4e11db "pdflatex"
+  "db_manual.out" 1769536790.99614 1536 ba67558a0efe4252b1ccb6ba0d038fb6 "pdflatex"
+  "db_manual.tex" 1769536789.95209 5496 023623708f21e1de47e2b0423dde2db2 ""
+  "db_manual.toc" 1769536790.99637 861 149c454f76f5eb3a68c8172f1223ee92 "pdflatex"
   (generated)
   "db_manual.aux"
   "db_manual.log"

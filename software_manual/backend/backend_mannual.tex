@@ -54,7 +54,7 @@
 The backend for the Movie Database was designed with a focus on performance, reliability, and modularity. We adopted a layered architecture to ensure clear separation of concerns: Routers manage HTTP requests, the Repository layer abstracts database interactions, and the application logic connects these components.
 
 \section{Technologies}
-We selected a technology stack that prioritizes development efficiency and system stability.
+We chose the technilgies for the same reasons as written in the client:
 
 \subsection{Python}
 Python serves as the core language for our development. Its concise syntax allows for efficient expression of complex logic. Whether for data migration scripts or defining API endpoints, Python's readability facilitates maintenance and debugging.
@@ -67,8 +67,10 @@ FastAPI was chosen for its high performance and modern features, representing a 
     \item \textbf{Data Validation}: Integration with Pydantic ensures rigorous data validation, rejecting invalid requests automatically.
 \end{enumerate}
 
+We also just wanted to learn this technology, as its a standard for modern web development.
+
 \subsection{Uvicorn}
-Uvicorn serves as the ASGI server for the application, enabling the handling of concurrent connections efficiently without blocking.
+Uvicorn serves as the ASGI (Asynchronous Server Gateway Interface) server for the application, enabling the handling of concurrent connections efficiently without blocking.
 
 \subsection{MySQL Connector}
 The \texttt{mysql-connector} library provides robust database connectivity. We encapsulated this within a \texttt{Repository} class to manage connection pooling and execution automatically.
@@ -82,7 +84,7 @@ Pandas was utilized to efficienty import and process large CSV datasets. It allo
 \section{Core Infrastructure}
 
 \subsection{The Entry Point (\texttt{main.py})}
-This file initializes the application. We configured the CORS middleware to allow requests from the Angular frontend, which operates on a different port (4200).
+This file initializes the application. We configured the CORS (Cross-origin resource sharing) middleware to allow requests from the Angular frontend, which operates on a different port (4200).
 
 \begin{lstlisting}[language=Python, caption={CORS Configuration}]
 app.add_middleware(
@@ -94,7 +96,7 @@ app.add_middleware(
 )
 \end{lstlisting}
 
-\subsection{The Data Access Layer}
+\subsection{The Data Access Layer (DAL)}
 To maintain a clean codebase, we implemented a generic `Repository` class in `app/repository.py`. This class wraps database interactions, managing connection pools and executing queries safely.
 
 \begin{lstlisting}[language=Python, caption={Database execution wrapper}]

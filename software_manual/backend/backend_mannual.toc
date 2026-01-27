@@ -6,10 +6,10 @@
 \contentsline {subsection}{\numberline {2.4}MySQL Connector}{2}{subsection.2.4}%
 \contentsline {subsection}{\numberline {2.5}Pandas}{2}{subsection.2.5}%
 \contentsline {subsection}{\numberline {2.6}Python-Dotenv}{2}{subsection.2.6}%
-\contentsline {section}{\numberline {3}Core Infrastructure}{3}{section.3}%
-\contentsline {subsection}{\numberline {3.1}The Entry Point (\texttt {main.py})}{3}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}The Data Access Layer}{3}{subsection.3.2}%
+\contentsline {section}{\numberline {3}Core Infrastructure}{2}{section.3}%
+\contentsline {subsection}{\numberline {3.1}The Entry Point (\texttt {main.py})}{2}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}The Data Access Layer (DAL)}{3}{subsection.3.2}%
 \contentsline {section}{\numberline {4}How It Works: API Modules}{3}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Movies Router (\texttt {routers/movies.py})}{3}{subsection.4.1}%
-\contentsline {subsubsection}{\numberline {4.1.1}The Rating Transaction}{4}{subsubsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.1}The Rating Transaction}{3}{subsubsection.4.1.1}%
 \contentsline {subsection}{\numberline {4.2}Analytics Router (\texttt {routers/analytics.py})}{4}{subsection.4.2}%

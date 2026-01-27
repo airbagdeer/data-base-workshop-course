@@ -51,7 +51,7 @@
 \fi
 
 \section{Introduction}
-The database design was a critical component of the project, establishing a foundation for API performance and application integrity. We aimed for a normalized schema to minimize redundancy while maintaining the flexibility required for analytical queries. MySQL 8.4 was selected for its reliability and support for referential integrity.
+The database design was a critical component of the project, establishing a foundation for API performance and application integrity. We aimed for a normalized schema to minimize redundancy while maintaining the flexibility required for analytical queries.
 
 \section{The Core Entities}
 
@@ -112,7 +112,7 @@ We handled categories like Genres and Keywords as Many-to-Many relationships. Th
 \section{User Interaction}
 
 \subsection{Ratings}
-We built the \texttt{ratings} table to capture the user voice. We decided to use a string-based \texttt{user\_id} to align with our "Soft Session" strategy on the client. This table grows the fastest, so we kept it lightweight: just who, what, what score, and when.
+We built the \texttt{ratings} table. We decided to use a string-based \texttt{user\_id} to align with our "Soft Session" strategy on the client. This table grows the fastest, so we kept it lightweight: just who, what, what score, and when.
 
 \begin{lstlisting}[language=SQL, caption=Capturing user votes]
 CREATE TABLE IF NOT EXISTS ratings (

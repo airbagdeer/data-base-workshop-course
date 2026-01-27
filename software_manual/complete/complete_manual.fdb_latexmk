@@ -1,11 +1,11 @@
 # Fdb version 4
-["pdflatex"] 1769270245.59411 "/Users/eyal/Documents/data-base-workshop-course/software_manual/complete/complete_manual.tex" "complete_manual.pdf" "complete_manual" 1769270247.53234 0
-  "../backend/backend_mannual.tex" 1769269636.00024 6821 803f0edf0da1d969f0149856260d84f2 ""
-  "../client/client_manual.tex" 1769269668.32636 9114 0467b612f2bc84d1c29cc6913cbcbf5f ""
-  "../db/db_manual.tex" 1769269670.24505 5604 3049ae941e033b41c76bd96bbcf4430d ""
+["pdflatex"] 1769536898.97845 "/Users/eyal/Documents/data-base-workshop-course/software_manual/complete/complete_manual.tex" "complete_manual.pdf" "complete_manual" 1769536900.79149 0
+  "../backend/backend_mannual.tex" 1769536101.66408 6971 04936332cfe4328300cab3b770078e65 ""
+  "../client/client_manual.tex" 1769535826.30191 9176 cd852b81ec5e039e3f5fe08742201ddf ""
+  "../db/db_manual.tex" 1769536789.95209 5496 023623708f21e1de47e2b0423dde2db2 ""
   "../ui/images/new_ui.png" 1769020849.96899 3806465 c88a7ac5f800f13af9c1716a03f67c96 ""
   "../ui/images/old_ui.png" 1769020864.43636 7901562 543e7613af6aa0d28506bd0d0a989461 ""
-  "../ui/ui_design.tex" 1769270234.62822 2077 5163149a4cb4bc8a70851ecfde27bbea ""
+  "../ui/ui_design.tex" 1769536885.43484 2032 e8e1318ecc6f17fcb7174e746e302646 ""
   "/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ecbx1000.tfm" 1749112185.01532 3200 328792ff19833a39406f06fa0555a6dc ""
   "/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ecbx1200.tfm" 1749112185.01584 3200 b8d69bc738e5ef3e08cefeef3109ff56 ""
   "/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ecbx1440.tfm" 1749112185.01617 3196 0b37fa3083e15c57cfa8c4ff52f2807a ""
@@ -121,10 +121,10 @@
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/rerunfilecheck/rerunfilecheck.sty" 1752752224.04051 9684 a33a14b82ce60d6e77cb9be689d79ee6 ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/svn-prov/svn-prov.sty" 1769020420.04435 6852 44ea8d7e58290cde708a34ebf3953571 ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/varwidth/varwidth.sty" 1769020424.41655 10894 d359a13923460b2a73d4312d613554c8 ""
-  "complete_manual.aux" 1769270247.42348 9232 10ae2357c3d054afc170f4225b1dff78 "pdflatex"
-  "complete_manual.out" 1769270247.42484 7016 a22b6727c15ee06bf6f729328d6c830c "pdflatex"
+  "complete_manual.aux" 1769536900.69417 9238 9050694c87a84b426c3857e3b934fc53 "pdflatex"
+  "complete_manual.out" 1769536900.69543 7055 35db4c34fea94d47a1d1966125b7f7e7 "pdflatex"
   "complete_manual.tex" 1769270115.54514 2213 e4c5039dc1ebca43beddfcdf089a1800 ""
-  "complete_manual.toc" 1769270247.42519 4257 7f20d186da9f616aa66372705fe2654b "pdflatex"
+  "complete_manual.toc" 1769536900.69576 4263 36f04dfe00ffb3e596d8cf99a9759e04 "pdflatex"
   "images/sql-meme.jpeg" 1769270014.61467 61893 2bada4633150fa05917277fd9b52cbf1 ""
   (generated)
   "complete_manual.aux"

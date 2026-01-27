@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1769019304.50261 "/Users/eyal/Documents/data-base-workshop-course/software_manual/client/client_manual.tex" "client_manual.pdf" "client_manual" 1769019304.95701 0
+["pdflatex"] 1769535826.88123 "/Users/eyal/Documents/data-base-workshop-course/software_manual/client/client_manual.tex" "client_manual.pdf" "client_manual" 1769535827.38331 0
   "/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ecbx1000.tfm" 1749112185.01532 3200 328792ff19833a39406f06fa0555a6dc ""
   "/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ecbx1200.tfm" 1749112185.01584 3200 b8d69bc738e5ef3e08cefeef3109ff56 ""
   "/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ecbx1440.tfm" 1749112185.01617 3196 0b37fa3083e15c57cfa8c4ff52f2807a ""
@@ -49,8 +49,8 @@
   "/Library/Application Support/MiKTeX/texmfs/install/tex/latex/listings/lstpatch.sty" 1749112203.50451 353 9024412f43e92cd5b21fe9ded82d0610 ""
   "/Library/Application Support/MiKTeX/texmfs/install/tex/latex/url/url.sty" 1749112252.2674 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "/Library/Application Support/MiKTeX/texmfs/install/tex/latex/xcolor/xcolor.sty" 1749112252.48098 55384 b454dec21c2d9f45ec0b793f0995b992 ""
-  "/Users/eyal/Documents/data-base-workshop-course/software_manual/client/client_manual.tex" 1769019303.42964 9758 92de7317a6fb2461b28ff649ebe952b0 ""
-  "/Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/map/pdftex/pdftex.map" 1767794141.07575 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
+  "/Users/eyal/Documents/data-base-workshop-course/software_manual/client/client_manual.tex" 1769535826.30191 9176 cd852b81ec5e039e3f5fe08742201ddf ""
+  "/Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/map/pdftex/pdftex.map" 1769020427.44359 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1000.pk" 1769018328.54395 25420 eeec83c8760883fd346565e5a3331437 ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1200.pk" 1769018326.84398 31952 f6c862470cfe6628cfb2ea90affaccb3 ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1440.pk" 1769018329.37794 40136 df1a2c1772ae90e3e4a19e7a6386fd4f ""
@@ -59,6 +59,7 @@
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/pk/ljfour/jknappen/ec/dpi600/ecrm1200.pk" 1769018330.21774 28440 ff9ddd167dfea00461d8d5d4ff73fa7e ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/pk/ljfour/jknappen/ec/dpi600/ecrm1728.pk" 1769018331.06287 42516 933ab4b77b86a5136ebd6239d540d1af ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/pk/ljfour/jknappen/ec/dpi600/ectt0800.pk" 1769018324.26994 15192 6dc78076d06786f26a6b3418e549f2d4 ""
+  "/Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/pk/ljfour/jknappen/ec/dpi600/ectt1000.pk" 1769018325.94797 20028 80b8ef99c85318bee93f31a732864efc ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/pk/ljfour/jknappen/ec/dpi600/tctt0800.pk" 1769018184.77754 7416 9cb7e92c3cb95cc829faf482fe2ef330 ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/data/miktex/data/le/pdftex/pdflatex.fmt" 1749112581.80125 13161978 7f2b2f52692f1e0c7ac224cfb6dc5313 ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/generic/bigintcalc/bigintcalc.sty" 1752752223.22014 40635 c40361e206be584d448876bba8a64a3b ""
@@ -78,10 +79,10 @@
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/kvsetkeys/kvsetkeys.sty" 1749378062.63479 13815 760b0c02f691ea230f5359c4e1de23a7 ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/refcount/refcount.sty" 1752752217.53113 9878 9e94e8fa600d95f9c7731bb21dfb67a4 ""
   "/Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/rerunfilecheck/rerunfilecheck.sty" 1752752224.04051 9684 a33a14b82ce60d6e77cb9be689d79ee6 ""
-  "client_manual.aux" 1769019304.884 2677 b1d548cf8df3e867ec045866170eedba "pdflatex"
-  "client_manual.out" 1769019304.88457 2381 b99479b3663fa2149ee13b69e2727bef "pdflatex"
-  "client_manual.tex" 1769019303.42964 9758 92de7317a6fb2461b28ff649ebe952b0 ""
-  "client_manual.toc" 1769019304.88481 1329 6326008c4595a058551531c6910e13ad "pdflatex"
+  "client_manual.aux" 1769535827.30194 2675 b190b4f18e8cc87710dccd10ffd8f3a4 "pdflatex"
+  "client_manual.out" 1769535827.30252 2368 85ce570a5b3aaac6f508d88f21b2fc69 "pdflatex"
+  "client_manual.tex" 1769535826.30191 9176 cd852b81ec5e039e3f5fe08742201ddf ""
+  "client_manual.toc" 1769535827.3028 1327 58cc259543acb3f4772caad4a262f148 "pdflatex"
   (generated)
   "client_manual.aux"
   "client_manual.log"
