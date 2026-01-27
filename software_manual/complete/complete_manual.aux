@@ -35,12 +35,12 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2.2}FastAPI}{6}{subsection.2.2.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2.3}Uvicorn}{6}{subsection.2.2.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2.4}MySQL Connector}{6}{subsection.2.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.5}Pandas}{6}{subsection.2.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.5}Pandas}{7}{subsection.2.2.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2.6}Python-Dotenv}{7}{subsection.2.2.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2.3}Core Infrastructure}{7}{section.2.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3.1}The Entry Point (\texttt  {main.py})}{7}{subsection.2.3.1}\protected@file@percent }
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {2.1}CORS Configuration}{7}{lstlisting.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.2}The Data Access Layer}{7}{subsection.2.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.2}The Data Access Layer (DAL)}{7}{subsection.2.3.2}\protected@file@percent }
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {2.2}Database execution wrapper}{7}{lstlisting.2.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2.4}How It Works: API Modules}{7}{section.2.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.4.1}Movies Router (\texttt  {routers/movies.py})}{7}{subsection.2.4.1}\protected@file@percent }
@@ -53,32 +53,60 @@
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{toc}{\contentsline {section}{\numberline {3.1}Introduction}{9}{section.3.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Full Database Schema Diagram}}{9}{figure.3.1}\protected@file@percent }
+\newlabel{fig:sql-diagram}{{3.1}{9}{Full Database Schema Diagram}{figure.3.1}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.2}The Core Entities}{9}{section.3.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Movies}{9}{subsection.3.2.1}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.1}The heart of the system}{9}{lstlisting.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}People}{9}{subsection.3.2.2}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.2}A unified People table}{9}{lstlisting.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.3}Connecting the Dots: Relationships}{9}{section.3.3}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.1}The heart of the system}{10}{lstlisting.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}People}{10}{subsection.3.2.2}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.2}A unified People table}{10}{lstlisting.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}Relationships}{10}{section.3.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}The Cast \& Crew}{10}{subsection.3.3.1}\protected@file@percent }
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {3.3}Linking People to Movies}{10}{lstlisting.3.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}Categorization (Genres, Keywords)}{10}{subsection.3.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.4}User Interaction}{10}{section.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.1}Ratings}{10}{subsection.3.4.1}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.4}Capturing user votes}{10}{lstlisting.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.5}Binary Storage}{10}{section.3.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.1}Storing Images in the DB}{10}{subsection.3.5.1}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.5}Self-contained image storage}{10}{lstlisting.3.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {4}Bonus: Exceptional UI Design}{11}{chapter.4}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.4}Genre Association}{10}{lstlisting.3.4}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.5}Keywords Definition}{11}{lstlisting.3.5}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.6}Keyword Association}{11}{lstlisting.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.4}Production Details}{11}{section.3.4}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.7}Production Companies}{11}{lstlisting.3.7}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.8}Production Countries}{11}{lstlisting.3.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.5}User Interaction}{11}{section.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.1}Ratings}{11}{subsection.3.5.1}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.9}Capturing user votes}{11}{lstlisting.3.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.6}Binary Storage}{12}{section.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.1}Storing Images in the DB}{12}{subsection.3.6.1}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.10}Self-contained image storage}{12}{lstlisting.3.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.7}Application Logic Queries}{12}{section.3.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7.1}Movie Retrieval}{12}{subsection.3.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7.2}Movie Details Enrichment}{12}{subsection.3.7.2}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.11}Fetching Genres}{12}{lstlisting.3.11}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.12}Fetching Cast}{12}{lstlisting.3.12}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3.13}Fetching Crew}{12}{lstlisting.3.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7.3}Search}{13}{subsection.3.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7.4}Rating System}{13}{subsection.3.7.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7.5}Assets}{13}{subsection.3.7.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.8}Analytics \& Reporting}{13}{section.3.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8.1}Genre Popularity}{13}{subsection.3.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8.2}Actor Reuse (Prolific Actors)}{13}{subsection.3.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8.3}Runtime Analysis}{14}{subsection.3.8.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8.4}Financial Underperformance ("Flops")}{14}{subsection.3.8.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8.5}Director-Actors}{14}{subsection.3.8.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8.6}Global Reach}{14}{subsection.3.8.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8.7}Content Richness}{14}{subsection.3.8.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8.8}Genre Complexity}{14}{subsection.3.8.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8.9}Golden Era}{15}{subsection.3.8.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8.10}Multiskilled Crew}{15}{subsection.3.8.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}Bonus: Exceptional UI Design}{16}{chapter.4}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {4.1}Philosophy}{11}{section.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}Visual Identity}{11}{section.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Glassmorphism}{11}{subsection.4.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Micro-Interactions}{11}{subsection.4.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Color Palette}{11}{subsection.4.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.3}Evolution}{11}{section.4.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces The initial functional prototype.}}{12}{figure.4.1}\protected@file@percent }
-\newlabel{fig:old_ui}{{4.1}{12}{The initial functional prototype}{figure.4.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces The final design with rich imagery and dark mode.}}{12}{figure.4.2}\protected@file@percent }
-\newlabel{fig:new_ui}{{4.2}{12}{The final design with rich imagery and dark mode}{figure.4.2}{}}
-\gdef \@abspage@last{13}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Philosophy}{16}{section.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Visual Identity}{16}{section.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Glassmorphism}{16}{subsection.4.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Micro-Interactions}{16}{subsection.4.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Color Palette}{16}{subsection.4.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}Evolution}{16}{section.4.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces The initial functional prototype.}}{17}{figure.4.1}\protected@file@percent }
+\newlabel{fig:old_ui}{{4.1}{17}{The initial functional prototype}{figure.4.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces The final design with rich imagery and dark mode.}}{17}{figure.4.2}\protected@file@percent }
+\newlabel{fig:new_ui}{{4.2}{17}{The final design with rich imagery and dark mode}{figure.4.2}{}}
+\gdef \@abspage@last{18}

@@ -149,6 +149,8 @@ INPUT /Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/fi
 INPUT /Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/filemod/filemod-expmin.sty
 INPUT /Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/import/import.sty
 INPUT /Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/import/import.sty
+INPUT /Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/float/float.sty
+INPUT /Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/float/float.sty
 INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/l3backend/l3backend-pdftex.def
 INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/l3backend/l3backend-pdftex.def
 INPUT ./complete_manual.aux
@@ -220,6 +222,13 @@ INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/listings/lstl
 INPUT ../db/db_manual.tex
 INPUT ../db/db_manual.tex
 INPUT ../db/db_manual.tex
+INPUT ../db/images/sql-diagram.png
+INPUT ../db/images/sql-diagram.png
+INPUT ../db/images/sql-diagram.png
+INPUT ../db/images/sql-diagram.png
+INPUT ../db/images/sql-diagram.png
+INPUT ../db/images/sql-diagram.png
+INPUT ../db/images/sql-diagram.png
 INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/listings/lstlang1.sty
 INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/listings/lstlang1.sty
 INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/listings/lstlang1.sty
