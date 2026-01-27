@@ -99,6 +99,17 @@ INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/graphics/math
 INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/graphics/mathcolor.ltx
 INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/base/textcomp.sty
 INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/base/textcomp.sty
+INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/graphics/graphicx.sty
+INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/graphics/graphicx.sty
+INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/graphics/graphics.sty
+INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/graphics/graphics.sty
+INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/graphics/trig.sty
+INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/graphics/trig.sty
+INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/graphics-cfg/graphics.cfg
+INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/graphics-cfg/graphics.cfg
+INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/graphics-cfg/graphics.cfg
+INPUT /Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/float/float.sty
+INPUT /Users/eyal/Library/Application Support/MiKTeX/texmfs/install/tex/latex/float/float.sty
 INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/l3backend/l3backend-pdftex.def
 INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/l3backend/l3backend-pdftex.def
 INPUT ./db_manual.aux
@@ -116,6 +127,11 @@ OUTPUT db_manual.out
 INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/context/base/mkii/supp-pdf.mkii
 INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/context/base/mkii/supp-pdf.mkii
 INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/context/base/mkii/supp-pdf.mkii
+INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/epstopdf-pkg/epstopdf-base.sty
+INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/epstopdf-pkg/epstopdf-base.sty
+INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/00miktex/epstopdf-sys.cfg
+INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/00miktex/epstopdf-sys.cfg
+INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/00miktex/epstopdf-sys.cfg
 INPUT /Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ecrm1728.tfm
 INPUT /Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ecrm1200.tfm
 INPUT /Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmr12.tfm
@@ -135,6 +151,13 @@ INPUT db_manual.toc
 INPUT /Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ecbx1000.tfm
 OUTPUT db_manual.toc
 INPUT /Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/map/pdftex/pdftex.map
+INPUT ../db/images/sql-diagram.png
+INPUT ../db/images/sql-diagram.png
+INPUT ../db/images/sql-diagram.png
+INPUT ../db/images/sql-diagram.png
+INPUT ../db/images/sql-diagram.png
+INPUT ../db/images/sql-diagram.png
+INPUT ../db/images/sql-diagram.png
 INPUT /Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ecbx1200.tfm
 INPUT /Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ectt1000.tfm
 INPUT /Library/Application Support/MiKTeX/texmfs/install/tex/latex/listings/lstlang1.sty
@@ -144,9 +167,12 @@ INPUT /Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/e
 INPUT /Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ecrm0800.tfm
 INPUT /Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ecrm0500.tfm
 INPUT /Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/ecti1000.tfm
+INPUT /Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/jknappen/ec/tctt0800.tfm
 INPUT db_manual.aux
 INPUT ./db_manual.out
 INPUT ./db_manual.out
+INPUT /Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/pk/ljfour/jknappen/ec/dpi600/tctt0800.pk
+INPUT /Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/pk/ljfour/jknappen/ec/dpi600/tctt0800.pk
 INPUT /Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/pk/ljfour/jknappen/ec/dpi600/ecti1000.pk
 INPUT /Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/pk/ljfour/jknappen/ec/dpi600/ecti1000.pk
 INPUT /Users/eyal/Library/Application Support/MiKTeX/texmfs/data/fonts/pk/ljfour/jknappen/ec/dpi600/ectt0800.pk

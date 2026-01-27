@@ -1,11 +1,29 @@
 \contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
 \contentsline {section}{\numberline {2}The Core Entities}{2}{section.2}%
 \contentsline {subsection}{\numberline {2.1}Movies}{2}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}People}{2}{subsection.2.2}%
-\contentsline {section}{\numberline {3}Connecting the Dots: Relationships}{2}{section.3}%
-\contentsline {subsection}{\numberline {3.1}The Cast \& Crew}{2}{subsection.3.1}%
+\contentsline {subsection}{\numberline {2.2}People}{3}{subsection.2.2}%
+\contentsline {section}{\numberline {3}Relationships}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}The Cast \& Crew}{3}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Categorization (Genres, Keywords)}{3}{subsection.3.2}%
-\contentsline {section}{\numberline {4}User Interaction}{3}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Ratings}{3}{subsection.4.1}%
-\contentsline {section}{\numberline {5}Binary Storage}{3}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Storing Images in the DB}{3}{subsection.5.1}%
+\contentsline {section}{\numberline {4}Production Details}{4}{section.4}%
+\contentsline {section}{\numberline {5}User Interaction}{4}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Ratings}{4}{subsection.5.1}%
+\contentsline {section}{\numberline {6}Binary Storage}{4}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Storing Images in the DB}{4}{subsection.6.1}%
+\contentsline {section}{\numberline {7}Application Logic Queries}{5}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Movie Retrieval}{5}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Movie Details Enrichment}{5}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Search}{5}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}Rating System}{5}{subsection.7.4}%
+\contentsline {subsection}{\numberline {7.5}Assets}{6}{subsection.7.5}%
+\contentsline {section}{\numberline {8}Analytics \& Reporting}{6}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Genre Popularity}{6}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Actor Reuse (Prolific Actors)}{6}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Runtime Analysis}{6}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}Financial Underperformance ("Flops")}{6}{subsection.8.4}%
+\contentsline {subsection}{\numberline {8.5}Director-Actors}{7}{subsection.8.5}%
+\contentsline {subsection}{\numberline {8.6}Global Reach}{7}{subsection.8.6}%
+\contentsline {subsection}{\numberline {8.7}Content Richness}{7}{subsection.8.7}%
+\contentsline {subsection}{\numberline {8.8}Genre Complexity}{7}{subsection.8.8}%
+\contentsline {subsection}{\numberline {8.9}Golden Era}{7}{subsection.8.9}%
+\contentsline {subsection}{\numberline {8.10}Multiskilled Crew}{8}{subsection.8.10}%

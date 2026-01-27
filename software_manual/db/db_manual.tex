@@ -6,6 +6,8 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{textcomp}
+\usepackage{graphicx}
+\usepackage{float}
 
 \geometry{a4paper, margin=1in}
 
@@ -53,6 +55,13 @@
 \section{Introduction}
 The database design was a critical component of the project, establishing a foundation for API performance and application integrity. We aimed for a normalized schema to minimize redundancy while maintaining the flexibility required for analytical queries.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{../db/images/sql-diagram.png}
+    \caption{Full Database Schema Diagram}
+    \label{fig:sql-diagram}
+\end{figure}
+
 \section{The Core Entities}
 
 \subsection{Movies}
@@ -86,7 +95,7 @@ CREATE TABLE IF NOT EXISTS people (
 );
 \end{lstlisting}
 
-\section{Connecting the Dots: Relationships}
+\section{Relationships}
 The database relational structure defines the connections between entities.
 
 \subsection{The Cast \& Crew}
@@ -108,6 +117,65 @@ CREATE TABLE IF NOT EXISTS cast_members (
 
 \subsection{Categorization (Genres, Keywords)}
 We handled categories like Genres and Keywords as Many-to-Many relationships. This means a movie can be both "Action" and "Comedy". We separated the names into their own lookup tables (\texttt{genres}, \texttt{keywords}) and used junction tables (\texttt{movie\_genres}) to link them. This makes searching for "All Action movies" incredibly fast because it's just a simple index lookup.
+
+\begin{lstlisting}[language=SQL, caption=Genre Association]
+CREATE TABLE IF NOT EXISTS movie_genres (
+    movie_id INT,
+    genre_name VARCHAR(100) NOT NULL,
+    PRIMARY KEY (movie_id, genre_name),
+    FOREIGN KEY (movie_id) REFERENCES movies(id)
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL, caption=Keywords Definition]
+CREATE TABLE IF NOT EXISTS keywords (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL, caption=Keyword Association]
+CREATE TABLE IF NOT EXISTS movie_keywords (
+    movie_id INT,
+    keyword_id INT,
+    PRIMARY KEY (movie_id, keyword_id),
+    FOREIGN KEY (movie_id) REFERENCES movies(id),
+    FOREIGN KEY (keyword_id) REFERENCES keywords(id)
+);
+\end{lstlisting}
+
+\section{Production Details}
+To provide a comprehensive view of the film's origin, we track both the production companies and the countries involved. These are modeled as many-to-many relationships, acknowledging that modern films are often co-productions.
+
+\begin{lstlisting}[language=SQL, caption=Production Companies]
+CREATE TABLE IF NOT EXISTS production_companies (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS movie_companies (
+    movie_id INT,
+    company_id INT,
+    PRIMARY KEY (movie_id, company_id),
+    FOREIGN KEY (movie_id) REFERENCES movies(id),
+    FOREIGN KEY (company_id) REFERENCES production_companies(id)
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL, caption=Production Countries]
+CREATE TABLE IF NOT EXISTS production_countries (
+    iso_3166_1 VARCHAR(10) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS movie_countries (
+    movie_id INT,
+    country_code VARCHAR(10),
+    PRIMARY KEY (movie_id, country_code),
+    FOREIGN KEY (movie_id) REFERENCES movies(id),
+    FOREIGN KEY (country_code) REFERENCES production_countries(iso_3166_1)
+);
+\end{lstlisting}
 
 \section{User Interaction}
 
@@ -137,6 +205,193 @@ CREATE TABLE IF NOT EXISTS movie_posters (
     image LONGBLOB,
     FOREIGN KEY (movie_id) REFERENCES movies(id)
 );
+\end{lstlisting}
+
+\section{Application Logic Queries}
+This section documents the SQL queries used within the application's backend logic.
+
+\subsection{Movie Retrieval}
+For the main listing, we fetch movies with pagination logic.
+\begin{lstlisting}[language=SQL]
+SELECT * FROM movies LIMIT %s OFFSET %s
+\end{lstlisting}
+
+\subsection{Movie Details Enrichment}
+To efficiently load related data for a list of movies (or a single movie), we use \texttt{IN} clauses or direct equality checks to fetch Genres, Cast, and Crew.
+
+\begin{lstlisting}[language=SQL, caption=Fetching Genres]
+SELECT mg.movie_id, mg.genre_name 
+FROM movie_genres mg 
+WHERE mg.movie_id IN ({placeholders})
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL, caption=Fetching Cast]
+SELECT c.movie_id, p.id, p.name, p.gender, p.profile_path, 
+       c.character_name, c.order_index
+FROM people p
+JOIN cast_members c ON p.id = c.person_id
+WHERE c.movie_id IN ({placeholders})
+ORDER BY c.movie_id, c.order_index
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL, caption=Fetching Crew]
+SELECT c.movie_id, p.id, p.name, p.gender, p.profile_path, 
+       c.job, c.department
+FROM people p
+JOIN crew_members c ON p.id = c.person_id
+WHERE c.movie_id IN ({placeholders})
+\end{lstlisting}
+
+\subsection{Search}
+We implement a simple but effective text search using \texttt{LIKE} on the movie title.
+\begin{lstlisting}[language=SQL]
+SELECT * FROM movies WHERE title LIKE %s
+\end{lstlisting}
+
+\subsection{Rating System}
+The rating system involves a transactional flow to ensure data consistency.
+
+First, we check if the user has already rated the movie:
+\begin{lstlisting}[language=SQL]
+SELECT rating FROM ratings 
+WHERE movie_id = %s AND user_id = %s
+\end{lstlisting}
+
+Then, we perform an "Upsert" operation. If the record exists, we update the timestamp and rating; otherwise, we insert a new record.
+\begin{lstlisting}[language=SQL]
+INSERT INTO ratings (movie_id, user_id, rating) 
+VALUES (%s, %s, %s)
+ON DUPLICATE KEY UPDATE 
+    rating = VALUES(rating),
+    timestamp = CURRENT_TIMESTAMP
+\end{lstlisting}
+
+Finally, to keep the read-heavy \texttt{movies} table fast, we recalculate and update the aggregated statistics on the movie record itself.
+\begin{lstlisting}[language=SQL]
+UPDATE movies 
+SET vote_average = %s, vote_count = %s
+WHERE id = %s
+\end{lstlisting}
+
+\subsection{Assets}
+Retrieving the binary image data for a movie poster.
+\begin{lstlisting}[language=SQL]
+SELECT image FROM movie_posters WHERE movie_id = %s
+\end{lstlisting}
+
+\section{Analytics \& Reporting}
+The system enables complex analytical queries to derive insights from the movie database. We create 10 different queries to analyze the data. This section details the SQL formulation for these reports. 
+
+\subsection{Genre Popularity}
+To determine which genres are most prevalent in the database, we aggregate the count of movies for each genre and order them descending.
+\begin{lstlisting}[language=SQL]
+SELECT genre_name AS genre, COUNT(movie_id) AS movie_count
+FROM movie_genres
+GROUP BY genre_name
+ORDER BY movie_count DESC
+LIMIT 5;
+\end{lstlisting}
+
+\subsection{Actor Reuse (Prolific Actors)}
+This query identifies actors who have appeared in more than one movie. It uses a \texttt{HAVING} clause to filter groups (actors) after aggregation.
+\begin{lstlisting}[language=SQL]
+SELECT p.name as actor_name, COUNT(c.movie_id) as movie_count
+FROM people p
+JOIN cast_members c ON p.id = c.person_id
+GROUP BY p.id, p.name
+HAVING movie_count > 1
+ORDER BY movie_count DESC
+LIMIT 10
+\end{lstlisting}
+
+\subsection{Runtime Analysis}
+We calculate the average runtime for each genre. Since a movie can have multiple genres, it contributes to the average of each genre it belongs to.
+\begin{lstlisting}[language=SQL]
+SELECT mg.genre_name AS genre, AVG(m.runtime) AS avg_runtime
+FROM movie_genres mg
+JOIN movies m ON mg.movie_id = m.id
+WHERE m.runtime IS NOT NULL
+GROUP BY mg.genre_name
+ORDER BY avg_runtime DESC
+LIMIT 10
+\end{lstlisting}
+
+\subsection{Financial Underperformance ("Flops")}
+We identify movies with a significant budget (over \$1M) that failed to recover their costs. The loss is calculated directly in the projection as \texttt{budget - revenue}.
+\begin{lstlisting}[language=SQL]
+SELECT title, budget, revenue, (budget - revenue) as loss
+FROM movies
+WHERE budget > 1000000 AND revenue < budget AND revenue > 0
+ORDER BY loss DESC
+LIMIT 10
+\end{lstlisting}
+
+\subsection{Director-Actors}
+This complex join finds individuals who have both directed and acted in the \textit{same} movie. It requires joining \texttt{people} to \texttt{cast\_members} and \texttt{crew\_members}, and ensuring the \texttt{movie\_id} matches across both roles.
+\begin{lstlisting}[language=SQL]
+SELECT p.name, m.title
+FROM people p
+JOIN cast_members c ON p.id = c.person_id
+JOIN crew_members cr ON p.id = cr.person_id AND c.movie_id = cr.movie_id
+JOIN movies m ON c.movie_id = m.id
+WHERE cr.job = 'Director'
+\end{lstlisting}
+
+\subsection{Global Reach}
+We aggregate production countries to see which nations produce the most content in our database.
+\begin{lstlisting}[language=SQL]
+SELECT pc.name, COUNT(mc.movie_id) as movie_count
+FROM production_countries pc
+JOIN movie_countries mc ON pc.iso_3166_1 = mc.country_code
+GROUP BY pc.name
+ORDER BY movie_count DESC
+LIMIT 10
+\end{lstlisting}
+
+\subsection{Content Richness}
+We rank movies by the number of associated keywords, using this as a proxy for the depth of metadata available.
+\begin{lstlisting}[language=SQL]
+SELECT m.title, COUNT(mk.keyword_id) as keyword_count
+FROM movies m
+JOIN movie_keywords mk ON m.id = mk.movie_id
+GROUP BY m.id, m.title
+ORDER BY keyword_count DESC
+LIMIT 10
+\end{lstlisting}
+
+\subsection{Genre Complexity}
+We identify movies that are categorized into more than 3 genres. This helps find films with complex or cross-cutting themes.
+\begin{lstlisting}[language=SQL]
+SELECT m.title, COUNT(mg.genre_name) as genre_count
+FROM movies m
+JOIN movie_genres mg ON m.id = mg.movie_id
+GROUP BY m.id, m.title
+HAVING genre_count > 3
+ORDER BY genre_count DESC
+\end{lstlisting}
+
+\subsection{Golden Era}
+We determine the "Best Year" for cinema based on the average user rating. We filter for years with at least 3 movies to avoid statistical outliers from years with very few releases.
+\begin{lstlisting}[language=SQL]
+SELECT YEAR(release_date) as year, AVG(vote_average) as avg_vote, COUNT(*) as movie_count
+FROM movies
+WHERE release_date IS NOT NULL
+GROUP BY year
+HAVING movie_count >= 3
+ORDER BY avg_vote DESC
+LIMIT 1
+\end{lstlisting}
+
+\subsection{Multiskilled Crew}
+We find crew members who are talented enough to work in multiple different departments (e.g., Sound and Editing). We use \texttt{COUNT(DISTINCT cr.department)} to ensure we are counting different functional areas, not just multiple credits in the same department.
+\begin{lstlisting}[language=SQL]
+SELECT p.name, COUNT(DISTINCT cr.department) as dept_count
+FROM people p
+JOIN crew_members cr ON p.id = cr.person_id
+GROUP BY p.id, p.name
+HAVING dept_count > 1
+ORDER BY dept_count DESC
+LIMIT 10
 \end{lstlisting}
 
 \end{document}
